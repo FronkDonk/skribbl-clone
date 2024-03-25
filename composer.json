@@ -1,0 +1,20 @@
+{
+  "name": "fronkdonk/ecommerce-store",
+  "description": "ecommerce-store",
+  "type": "project",
+  "license": "MIT",
+  "minimum-stability": "stable",
+  "require": {
+    "doctrine/orm": "^3",
+    "doctrine/dbal": "^4",
+    "symfony/cache": "^7",
+    "doctrine/migrations": "^3.7",
+    "twig/twig": "^3.8",
+    "rafaelwendel/phpsupabase": "^0.0.7"
+  },
+  "autoload": {
+    "psr-0": {
+      "": "src/"
+    }
+  }
+}
