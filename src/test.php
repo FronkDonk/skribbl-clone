@@ -9,17 +9,12 @@
 </head>
 
 <body>
-    <?php
-    require '../vendor/autoload.php';
 
-    $loader = new \Twig\Loader\FilesystemLoader('./views');
-    $twig = new \Twig\Environment($loader);
+    <h1 class="text-red-500 ">asjdoasjid</h1>
 
-    echo $twig->render('button.twig', ["label" => 'someValue']);
-    echo $twig->render("input.twig")
-        ?>
+    <script type="module" src="./presence.js"></script>
+    <script type="module" src="./presence2.js"></script>
 
-    <script type="module" src="./test2.js"></script>
 </body>
 
 </html>

@@ -3,7 +3,7 @@
         'name' => 'fronkdonk/ecommerce-store',
         'pretty_version' => 'dev-main',
         'version' => 'dev-main',
-        'reference' => '5a806b687f62d81df49128b701420c2f68b253ca',
+        'reference' => 'ca767b0e00d6459bd0c81a22c8cd261d84a5f889',
         'type' => 'project',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
@@ -112,7 +112,7 @@
         'fronkdonk/ecommerce-store' => array(
             'pretty_version' => 'dev-main',
             'version' => 'dev-main',
-            'reference' => '5a806b687f62d81df49128b701420c2f68b253ca',
+            'reference' => 'ca767b0e00d6459bd0c81a22c8cd261d84a5f889',
             'type' => 'project',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),

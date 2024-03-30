@@ -43,15 +43,16 @@
         <div class="flex items-center justify-center py-12">
             <div class="mx-auto grid w-[350px] gap-6">
                 <div class="grid gap-2 text-center">
-                    <h1 class="text-3xl font-bold">{{ $signUpSuccess ? 'Check your email!' : 'Sign up' }}</h1>
+                    <h1 class="text-3xl font-bold"><?php echo e($signUpSuccess ? 'Check your email!' : 'Sign up'); ?></h1>
                     <p class="text-balance text-muted-foreground">
-                        {{ $signUpSuccess ? 'We just sent a verification link to' : 'Enter your information to create an account' }}
-                        @if ($signUpSuccess)
-                            <span class=" text-accent text-5xl">{{ $email }}</span>
-                        @endif
+                        <?php echo e($signUpSuccess ? 'We just sent a verification link to' : 'Enter your information to create an account'); ?>
+
+                        <?php if($signUpSuccess): ?>
+                            <span class=" text-accent text-5xl"><?php echo e($email); ?></span>
+                        <?php endif; ?>
                     </p>
                 </div>
-                @if (!$signUpSuccess)
+                <?php if(!$signUpSuccess): ?>
                     <form method="post" class="grid gap-4">
                         <div class="grid gap-2">
                             <?php
@@ -116,7 +117,7 @@
                             Sign in
                         </a>
                     </div>
-                @endif
+                <?php endif; ?>
 
             </div>
         </div>
@@ -130,3 +131,4 @@
 </body>
 
 </html>
+<?php /**PATH C:\xampp\htdocs\skribbl-clone\src\views/sign-up.blade.php ENDPATH**/ ?>

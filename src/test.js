@@ -5,9 +5,9 @@ const client = createClient(
 );
 
 const myChannel = client.channel("room-1", {
-  /*  config: {
+  config: {
     broadcast: { self: true },
-  }, */
+  },
 });
 
 myChannel.subscribe((status) => {
