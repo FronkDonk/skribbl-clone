@@ -1,0 +1,37 @@
+          <?php
+          require $_SERVER['DOCUMENT_ROOT'] . '/vendor/autoload.php';
+          
+          use Jenssegers\Blade\Blade;
+          
+          $blade = new Blade($_SERVER['DOCUMENT_ROOT'] .'/src/components/ui', $_SERVER['DOCUMENT_ROOT'] .'/src/components/ui/cache');
+          $message = $message ?? '';
+          ?>
+          <?php if($message): ?>
+              <div id="messageCard" class="p-2 bg-muted rounded-md flex items-center gap-2">
+                  <?php
+                  
+                  echo $blade
+                      ->make('avatar', [
+                          'class' => 'from-[#7FB2FF] to-[#FF7F7F]',
+                      ])
+                      ->render();
+                  ?>
+                  <div>
+                      <div class="flex items-center gap-2 ">
+                          <?php
+                          echo $blade
+                              ->make('label', [
+                                  'label' => $username,
+                                  'class' => 'text-base',
+                              ])
+                              ->render();
+                          ?>
+                          <!-- date -->
+                          <p class="text-sm text-muted-foreground">9:11pm</p>
+                      </div>
+
+                      <p id="messageContent" class="text-sm "><?php echo e($message); ?></p>
+                  </div>
+              </div>
+          <?php endif; ?>
+<?php /**PATH C:\xampp\htdocs\ecommerce-store\src\components\ui/message.blade.php ENDPATH**/ ?>

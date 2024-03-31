@@ -10,12 +10,13 @@
 
 <body>
     <?php
+    session_start();
     $signUpSuccess = false;
-    require '../../vendor/autoload.php';
+    require $_SERVER['DOCUMENT_ROOT'] . '/vendor/autoload.php';
     
     use Jenssegers\Blade\Blade;
     
-    $blade = new Blade('../views', '../views/cache');
+    $blade = new Blade($_SERVER['DOCUMENT_ROOT'] . '/src/components/ui', $_SERVER['DOCUMENT_ROOT'] . '/src/components/ui/cache');
     
     if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['username']) && isset($_POST['email']) && isset($_POST['password'])) {
         require '../db/supabase.php';
@@ -34,6 +35,7 @@
             $data = $auth->data();
             print_r($data);
             $signUpSuccess = true;
+            $_SESSION['userId'] = $data->$id;
         } catch (Exception $e) {
             echo $e->getMessage();
         }

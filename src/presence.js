@@ -22,22 +22,5 @@ myChannel.subscribe(async (status) => {
   const presenceTrackStatus = await myChannel.track(userStatus);
   console.log(presenceTrackStatus);
 });
-/* const basics = client.channel("room-01", {
-  config: {
-    broadcast: { self: true },
-  },
-});
 
-const userStatus2 = {
-  user: "penisman",
-  online_at: new Date().toISOString(),
-};
 
-basics.subscribe(async (status) => {
-  if (status !== "SUBSCRIBED") {
-    return;
-  }
-});
-
-const presence = await basics.track(userStatus2);
-console.log(presence); */

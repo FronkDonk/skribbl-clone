@@ -12,7 +12,7 @@
     <?php
     session_start();
 
-    if ($_SESSION["access_token"]) {
+    if (isset($_SESSION["id"])) {
         header("Location: sign-up.php");
     }
 
@@ -103,7 +103,7 @@ if (
     try {
         $auth->signInWithEmailAndPassword($email, $password);
         $data = $auth->data();
-        $_SESSION["access_token"] = $data->access_token;
+        $_SESSION['id'] = $data->user->id;
     } catch (Exception $e) {
         echo $e->getMessage();
     }

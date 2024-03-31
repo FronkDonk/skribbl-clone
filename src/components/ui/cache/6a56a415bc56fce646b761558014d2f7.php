@@ -3,4 +3,4 @@
     <?php echo e($label); ?>
 
 </label>
-<?php /**PATH C:\xampp\htdocs\skribbl-clone\src\views/label.blade.php ENDPATH**/ ?>
+<?php /**PATH C:\xampp\htdocs\ecommerce-store\src\components\ui/label.blade.php ENDPATH**/ ?>
