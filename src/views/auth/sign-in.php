@@ -4,23 +4,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="../output.css" rel="stylesheet">
+    <link href="/src/output.css" rel="stylesheet">
     <title>Document</title>
 </head>
 
 <body>
     <?php
-    session_start();
+    require $_SERVER['DOCUMENT_ROOT'] . '/vendor/autoload.php';
 
-    if (isset($_SESSION["id"])) {
-        header("Location: sign-up.php");
-    }
-
-    require '../../vendor/autoload.php';
 
     use Jenssegers\Blade\Blade;
+    $blade = new Blade($_SERVER['DOCUMENT_ROOT'] . '/src/components/ui', $_SERVER['DOCUMENT_ROOT'] . '/src/components/ui/cache');
 
-    $blade = new Blade('../views', '../views/cache');
     ?>
     <div class="w-full h-svh lg:grid lg:min-h-[600px] lg:grid-cols-2 xl:min-h-[800px]">
         <div class="flex items-center justify-center py-12">
@@ -31,7 +26,7 @@
                         Enter your email below to sign in to your account
                     </p>
                 </div>
-                <form method="post" class="grid gap-4">
+                <form id="myForm" method="post" class="grid gap-4">
                     <div class="grid gap-2">
                         <?php
                         echo $blade->make('label', [
@@ -40,6 +35,7 @@
                         echo $blade->make('input', [
                             "name" => "email",
                             "type" => "email",
+                            "id" => "",
                         ])->render();
                         ?>
                     </div>
@@ -59,6 +55,7 @@
                         echo $blade->make('input', [
                             "name" => "password",
                             "type" => "password",
+                            "id" => "",
                         ])->render();
                         ?>
                     </div>
@@ -84,29 +81,35 @@
                 class="h-full w-full object-cover dark:brightness-[0.2] dark:grayscale" />
         </div>
     </div>
+    <script>
+        document.getElementById('myForm').addEventListener('submit', async function (event) {
+            event.preventDefault(); // Prevent the form from being submitted normally
+
+            const formData = new FormData(this); // Create a FormData object from the form
+
+            // Send the form data to the server with fetch
+            const res = await fetch('/api/auth/sign-in', {
+                method: 'POST',
+                body: formData
+            })
+            if (!res.ok) {
+
+                const data
+                    = await res.json();
+                console.log(`Error: ${data.message}`);
+            } else {
+                const {
+                    data
+                } = await res.json();
+                // Log the response body to the console
+                console.log(data);
+                
+
+            }
+
+
+        });
+    </script>
 </body>
 
 </html>
-
-<?php
-if (
-    $_SERVER["REQUEST_METHOD"] == "POST"
-    && isset($_POST["email"])
-    && isset($_POST["password"])
-) {
-    require "../db/supabase.php";
-    $auth = $service->createAuth();
-
-    $email = filter_var($_POST["email"], FILTER_SANITIZE_EMAIL);
-    $password = $_POST["password"];
-
-    try {
-        $auth->signInWithEmailAndPassword($email, $password);
-        $data = $auth->data();
-        $_SESSION['id'] = $data->user->id;
-    } catch (Exception $e) {
-        echo $e->getMessage();
-    }
-}
-
-?>

@@ -20,3 +20,4 @@ $blade = new Blade($_SERVER['DOCUMENT_ROOT'] . '/src/components/ui', $_SERVER['D
         ?>
     </div>
 </nav>
+<?php /**PATH C:\xampp\htdocs\ecommerce-store\src\components\ui/navbar.blade.php ENDPATH**/ ?>

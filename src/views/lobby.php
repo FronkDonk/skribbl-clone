@@ -19,12 +19,14 @@
     $blade = new Blade($_SERVER['DOCUMENT_ROOT'] . '/src/components/ui', $_SERVER['DOCUMENT_ROOT'] . '/src/components/ui/cache');
 
     ?>
+
     <?php
-
-
+    echo $blade->make('navbar')->render();
     ?>
-   
 
+
+
+    <script src="/src/js/lobby.js" type="module"></script>
 </body>
 
 </html>

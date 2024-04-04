@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="/src/output.css" rel="stylesheet">
+    <link href="../../output.css" rel="stylesheet">
     <title>Sign up</title>
 </head>
 
@@ -18,21 +18,44 @@
     
     $blade = new Blade($_SERVER['DOCUMENT_ROOT'] . '/src/components/ui', $_SERVER['DOCUMENT_ROOT'] . '/src/components/ui/cache');
     
+    if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['username']) && isset($_POST['email']) && isset($_POST['password'])) {
+        require '../db/supabase.php';
+    
+        $username = $_POST['username'];
+        $email = filter_var($_POST['email'], FILTER_SANITIZE_EMAIL);
+        $password = $_POST['password'];
+        $auth = $service->createAuth();
+    
+        try {
+            $user_metadata = [
+                'username' => $_POST['username'],
+            ];
+    
+            $auth->createUserWithEmailAndPassword($email, $password, $user_metadata);
+            $data = $auth->data();
+            print_r($data);
+            $signUpSuccess = true;
+            $_SESSION['userId'] = $data->$id;
+        } catch (Exception $e) {
+            echo $e->getMessage();
+        }
+    }
     ?>
     <div class="w-full h-svh lg:grid lg:min-h-[600px] lg:grid-cols-2 xl:min-h-[800px]">
         <div class="flex items-center justify-center py-12">
             <div class="mx-auto grid w-[350px] gap-6">
                 <div class="grid gap-2 text-center">
-                    <h1 class="text-3xl font-bold">{{ $signUpSuccess ? 'Check your email!' : 'Sign up' }}</h1>
+                    <h1 class="text-3xl font-bold"><?php echo e($signUpSuccess ? 'Check your email!' : 'Sign up'); ?></h1>
                     <p class="text-balance text-muted-foreground">
-                        {{ $signUpSuccess ? 'We just sent a verification link to' : 'Enter your information to create an account' }}
-                        @if ($signUpSuccess)
-                            <span class=" text-accent text-5xl">{{ $email }}</span>
-                        @endif
+                        <?php echo e($signUpSuccess ? 'We just sent a verification link to' : 'Enter your information to create an account'); ?>
+
+                        <?php if($signUpSuccess): ?>
+                            <span class=" text-accent text-5xl"><?php echo e($email); ?></span>
+                        <?php endif; ?>
                     </p>
                 </div>
-                @if (!$signUpSuccess)
-                    <form id="myForm" method="post" class="grid gap-4">
+                <?php if(!$signUpSuccess): ?>
+                    <form method="post" class="grid gap-4">
                         <div class="grid gap-2">
                             <?php
                             echo $blade
@@ -96,7 +119,7 @@
                             Sign in
                         </a>
                     </div>
-                @endif
+                <?php endif; ?>
 
             </div>
         </div>
@@ -106,31 +129,8 @@
         </div>
     </div>
 
-    <script>
-        document.getElementById('myForm').addEventListener('submit', async function(event) {
-            event.preventDefault(); // Prevent the form from being submitted normally
 
-            const formData = new FormData(this); // Create a FormData object from the form
-
-            // Send the form data to the server with fetch
-            const res = await fetch('/api/auth/sign-up', {
-                method: 'POST',
-                body: formData
-            })
-            if (!res.ok) {
-                throw new Error(`HTTP error! status: ${res.status}`);
-            } else {
-                const {
-                    data
-                } = await res.json();
-                // Log the response body to the console
-                console.log(data);
-               
-            }
-
-
-        });
-    </script>
 </body>
 
 </html>
+<?php /**PATH C:\xampp\htdocs\ecommerce-store\src\components\ui/sign-up.blade.php ENDPATH**/ ?>
