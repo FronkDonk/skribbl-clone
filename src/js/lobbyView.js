@@ -1,5 +1,5 @@
 export function ownerOrPlayerView(players) {
-  console.log("onwerOrPlayerView", players)
+  console.log("onwerOrPlayerView", players);
   const owner = players.find(
     (player) => player.owner === true && player.isClient === true
   );
@@ -16,7 +16,7 @@ export function ownerOrPlayerView(players) {
 }
 
 export function enableStartButton(players) {
-  if (players.length === 2) {
+  if (players.length >= 1) {
     document.getElementById("startGame").disabled = false;
   }
 }

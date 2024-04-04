@@ -34,11 +34,8 @@
                 <canvas id="playerCanvas" class=" bg-muted aspect-video w-full ">
 
                 </canvas>
-                <svg class="cursor absolute h-8 w-8" viewBox="0 0 389 408" fill="none"
-                    xmlns="http://www.w3.org/2000/svg">
-                    <path
-                        d="M75.2425 395.818L6.94946 8.50924L376.515 143.02L200.629 237.751L199.717 238.242L199.076 239.054L75.2425 395.818Z"
-                        fill="#22E9E9" stroke="#FBFFFF" stroke-width="10" />
+                <svg class="cursor absolute h-8 w-8" viewBox="0 0 389 408" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M75.2425 395.818L6.94946 8.50924L376.515 143.02L200.629 237.751L199.717 238.242L199.076 239.054L75.2425 395.818Z" fill="#22E9E9" stroke="#FBFFFF" stroke-width="10" />
                 </svg>
         </section>
         <section id="ownerView" class="flex gap-6 h-full ">
@@ -49,7 +46,7 @@
                     </p>
                 </div>
                 <div class="p-6 pt-0">
-                    <form id="myForm" method="post" class="grid gap-4 ">
+                    <form id="myForm" class="grid gap-4 ">
                         <div class="grid gap-2">
                             <?php
                             echo $blade->make('label', [
@@ -132,40 +129,14 @@
             </div>
         </section>
     </main>
-    <script>
 
-        const id = window.location.pathname.split('/')[2];
-        document.getElementById("game-id").value = id;
-        document.getElementById('myForm').addEventListener('submit', async function (event) {
-            event.preventDefault();  // Prevent the form from being submitted normally
-
-            const formData = new FormData(this);  // Create a FormData object from the form
-
-            // Send the form data to the server with fetch
-
-            const res = await fetch('/api/new-game', {
-                method: 'POST',
-                body: formData
-            });
-            if (!res.ok) {
-                throw new Error(`HTTP error! status: ${res.status}`);
-            }
-            else {
-                const { data } = await res.json();
-                console.log(data);
-                // Log the response body to the console
-                /* console.log(data[0].id);
-                window.location.href = `/lobby/${data[0].id}`; */
-            }
-
-
-        });
-    </script>
+    <!--     <script src="/src/js/lobbyForm.js" type="module"></script>
     <script scr="/src/js/actions/getUserData.js" type="module"></script>
     <script src="/src/js/lobbyView.js" type="module"></script>
     <script src="/src/js/lobbyPresence.js" type="module"></script>
     <script src="/src/js/lobby.js" type="module"></script>
-    <script src="/src/js/lobbyCanvas.js" type="module"></script>
+    <script src="/src/js/lobbyCanvas.js" type="module"></script> -->
+    <script src="/dist/main.js"></script>
 
 </body>
 

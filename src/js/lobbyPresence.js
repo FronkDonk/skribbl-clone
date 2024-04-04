@@ -6,7 +6,7 @@ import {
 } from "./lobbyView.js";
 import { id } from "./lobby.js";
 
-let players = [];
+export let players = [];
 let elements = document.getElementsByClassName("onlineUsers");
 for (let i = 0; i < elements.length; i++) {
   elements[i].innerHTML = "";

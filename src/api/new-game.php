@@ -1,4 +1,5 @@
 <?php
+
 use Respect\Validation\Validator as v;
 
 require $_SERVER['DOCUMENT_ROOT'] . '/vendor/autoload.php';
@@ -36,21 +37,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             http_response_code(200);
             echo json_encode(['message' => 'Success', 'data' => $data]);
             exit;
-
-
         } catch (Exception $e) {
             http_response_code(500);
             echo json_encode(['message' => 'Internal server error']);
             exit;
         }
-
-
-
     } else {
         http_response_code(400);
         echo json_encode($errors);
         exit;
     }
-
 }
-?>

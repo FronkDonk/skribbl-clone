@@ -1,4 +1,5 @@
 <?php
+
 use Respect\Validation\Validator as v;
 
 require $_SERVER['DOCUMENT_ROOT'] . '/vendor/autoload.php';
@@ -21,12 +22,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $auth->signInWithEmailAndPassword($_POST["email"], $_POST["password"]);
             $data = $auth->data();
             $_SESSION['access_token'] = $data->access_token;
+            $_SESSION['userId'] = $data->user->id;
             http_response_code(200);
             echo json_encode(['message' => 'Success', 'data' => $data]);
             exit;
         } catch (Exception $e) {
             http_response_code(500);
-            
+
             echo json_encode(['message' => $e->getMessage()]);
 
             exit;
@@ -37,6 +39,4 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         exit;
     }
-
 }
-
