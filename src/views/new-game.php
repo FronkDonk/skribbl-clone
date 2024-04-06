@@ -136,7 +136,7 @@
     <script src="/src/js/lobbyPresence.js" type="module"></script>
     <script src="/src/js/lobby.js" type="module"></script>
     <script src="/src/js/lobbyCanvas.js" type="module"></script> -->
-    <script src="/dist/main.js"></script>
+    <script src="/dist/lobby.bundle.js"></script>
 
 </body>
 

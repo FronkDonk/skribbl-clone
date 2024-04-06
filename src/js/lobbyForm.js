@@ -8,6 +8,7 @@ const schema = z.object({
   drawingTime: z.enum(["20", "40", "60", "80"]),
   visibility: z.enum(["Public", "Private"]),
   gameId: z.string().uuid(),
+  ownerId: z.string().uuid(),
   players: z
     .array(
       z.object({
@@ -18,7 +19,7 @@ const schema = z.object({
     )
     .refine((players) => {
       // Check if there's at least one player who is the client and the owner
-      if (players.length >= 2) return false;
+      if (players.length < 2) return false;
       const clientOwner = players.find(
         (player) => player.isClient && player.owner
       );
@@ -29,20 +30,21 @@ const schema = z.object({
 });
 
 const id = window.location.pathname.split("/")[2];
-document.getElementById("game-id").value = id;
 document
   .getElementById("myForm")
   .addEventListener("submit", async function (event) {
     event.preventDefault(); // Prevent the form from being submitted normally
 
     const formData = new FormData(this); // Create a FormData object from the form
-
+    formData.append("ownerId", userId);
+    formData.append("gameId", id);
     const data = {
       maxPlayers: formData.get("selectedValue-maxPlayers"),
       numRounds: formData.get("selectedValue-numRounds"),
       drawingTime: formData.get("selectedValue-drawingTime"),
-      visibility: formData.get("selectedValue-visibility"), // assuming this is a string
-      gameId: formData.get("game-id"), // assuming this is a string
+      visibility: formData.get("selectedValue-visibility"),
+      gameId: formData.get("gameId"),
+      ownerId: formData.get("ownerId"),
       players: players,
     };
 
@@ -58,9 +60,10 @@ document
       body: formData,
     });
     if (!res.ok) {
-      throw new Error(`HTTP error! status: ${res.status}`);
+      const data = await res.json();
+      console.error(data);
     } else {
-      const { data } = await res.json();
+      const data = await res.json();
       console.log(data);
       // Log the response body to the console
       /* console.log(data[0].id);

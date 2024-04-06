@@ -13,7 +13,7 @@ document.getElementById("startGame").disabled = true;
 
 export const gameId = segments[2];
 export const id = await getUserData();
-
+console.log({ id });
 if (!id) {
   console.log("ERror maybe display toast or something");
 }

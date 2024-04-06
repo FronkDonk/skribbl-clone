@@ -69,6 +69,7 @@ class ComposerStaticInitc66f93e710b6187c41047fced16a6ab8
             'Psr\\Container\\' => 14,
             'Psr\\Clock\\' => 10,
             'Psr\\Cache\\' => 10,
+            'Predis\\' => 7,
             'PHPSupabase\\' => 12,
         ),
         'J' => 
@@ -220,8 +221,8 @@ class ComposerStaticInitc66f93e710b6187c41047fced16a6ab8
         ),
         'Psr\\Http\\Message\\' => 
         array (
-            0 => __DIR__ . '/..' . '/psr/http-message/src',
-            1 => __DIR__ . '/..' . '/psr/http-factory/src',
+            0 => __DIR__ . '/..' . '/psr/http-factory/src',
+            1 => __DIR__ . '/..' . '/psr/http-message/src',
         ),
         'Psr\\Http\\Client\\' => 
         array (
@@ -239,6 +240,10 @@ class ComposerStaticInitc66f93e710b6187c41047fced16a6ab8
         array (
             0 => __DIR__ . '/..' . '/psr/cache/src',
         ),
+        'Predis\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/predis/predis/src',
+        ),
         'PHPSupabase\\' => 
         array (
             0 => __DIR__ . '/..' . '/rafaelwendel/phpsupabase/src',
@@ -253,9 +258,9 @@ class ComposerStaticInitc66f93e710b6187c41047fced16a6ab8
         ),
         'Illuminate\\Support\\' => 
         array (
-            0 => __DIR__ . '/..' . '/illuminate/macroable',
+            0 => __DIR__ . '/..' . '/illuminate/collections',
             1 => __DIR__ . '/..' . '/illuminate/conditionable',
-            2 => __DIR__ . '/..' . '/illuminate/collections',
+            2 => __DIR__ . '/..' . '/illuminate/macroable',
             3 => __DIR__ . '/..' . '/illuminate/support',
         ),
         'Illuminate\\Pipeline\\' => 

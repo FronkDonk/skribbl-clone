@@ -26,7 +26,7 @@
 
 
 
-    <script src="/src/js/lobby.js" type="module"></script>
+    <script src="" type="module"></script>
 </body>
 
 </html>

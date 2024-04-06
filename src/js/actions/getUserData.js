@@ -8,6 +8,7 @@ export async function getUserData() {
   } else {
     const { data } = await res.json();
     console.log("data", data);
+    console.log("data.id", data.id);
     return data.id;
   }
 }

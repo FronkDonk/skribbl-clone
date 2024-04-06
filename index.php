@@ -6,12 +6,30 @@ $dispatcher = FastRoute\simpleDispatcher(function (FastRoute\RouteCollector $r) 
         echo "Home page";
         echo "asjdajsdjaodj dioasjdioSOIDIASOJDIJASIODIOASJDIJAS";
     });
+    $r->addRoute('GET', '/game', function () {
+        $uuid = \Ramsey\Uuid\Uuid::uuid4();
+        header("Location: /new-game/{$uuid->toString()}");
+        exit ();
+    });
+    $r->addRoute("POST", "/api/clearPrevDrawers", function () {
+        require "src/api/clearPrevDrawers.php";
+    });
+    $r->addRoute("POST", "/api/addPlayerToGame", function () {
+        require "src/api/addPlayerToGame.php";
+    });
+    $r->addRoute("POST", "/api/addPrevDrawers", function () {
+        require "src/api/addPrevDrawers.php";
+    });
+    $r->addRoute('GET', '/game/{id}', function ($id) {
+        require "src/views/game.php";
+    });
     $r->addRoute('GET', '/new-game/{id}', function ($id) {
         require "src/views/new-game.php";
     });
     $r->addRoute('POST', '/new-game/{id}', function ($id) {
         require "src/api/new-game.php";
     });
+
     $r->addRoute('POST', '/api/renderOnlineUsers', function () {
         require "src/api/renderOnlineUsers.php";
     });

@@ -16,7 +16,7 @@ export function ownerOrPlayerView(players) {
 }
 
 export function enableStartButton(players) {
-  if (players.length >= 1) {
+  if (players.length >= 2) {
     document.getElementById("startGame").disabled = false;
   }
 }
