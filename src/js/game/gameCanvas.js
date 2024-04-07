@@ -1,6 +1,10 @@
 import { players } from "./gamePresence";
-import { gameId } from "./gamePresence";
-import { client } from "./gamePresence";
+import { client } from "../supabaseClient";
+
+const path = window.location.pathname;
+
+const segments = path.split("/");
+const gameId = segments[2];
 
 const gameCanvas = client.channel(`gameCanvas-${gameId}`, {});
 gameCanvas.subscribe(async (status) => {
@@ -11,18 +15,24 @@ gameCanvas.subscribe(async (status) => {
 
 let drawingCommands = [];
 
-const canvas = document.getElementById("playerCanvas");
+const canvas = document.getElementById("gameCanvas");
 const ctx = canvas.getContext("2d");
+const section = document.querySelector("section");
 
 // Set initial canvas dimensions
 canvas.width = canvas.offsetWidth;
 canvas.height = canvas.offsetHeight;
+
+window.onload = function () {
+  section.style.maxHeight = `${canvas.offsetHeight}px`;
+};
 
 // Update canvas dimensions when window size changes
 window.addEventListener("resize", () => {
   const tempCommands = [...drawingCommands];
   canvas.width = canvas.offsetWidth;
   canvas.height = canvas.offsetHeight;
+  section.style.maxHeight = `${canvas.offsetHeight}px`;
   drawingCommands = [...tempCommands];
   replay();
 });
@@ -114,11 +124,21 @@ gameCanvas.on("broadcast", { event: "drawing" }, ({ payload }) => {
   y = payload.clientY;
 });
 
-const clientPlayer = players.find((player) => player.isClient === true);
+export function updateEventListeners() {
+  // First, remove all existing event listeners
+  canvas.removeEventListener("mousedown", startDrawing);
+  canvas.removeEventListener("mouseup", stopDrawing);
+  canvas.removeEventListener("mouseout", stopDrawing);
+  canvas.removeEventListener("mousemove", draw);
 
-if (clientPlayer && clientPlayer.isDrawing) {
-  canvas.addEventListener("mousedown", startDrawing);
-  canvas.addEventListener("mouseup", stopDrawing);
-  canvas.addEventListener("mouseout", stopDrawing);
-  canvas.addEventListener("mousemove", draw);
+  const clientPlayer = players.find((player) => player.isClient === true);
+
+  // Then, if the client player is drawing, add the event listeners
+  if (clientPlayer && clientPlayer.isDrawing) {
+    console.log("you are drawing");
+    canvas.addEventListener("mousedown", startDrawing);
+    canvas.addEventListener("mouseup", stopDrawing);
+    canvas.addEventListener("mouseout", stopDrawing);
+    canvas.addEventListener("mousemove", draw);
+  }
 }

@@ -1,10 +1,16 @@
 import * as z from "zod";
 import { player } from "./gamePresence";
-import { gameRoom } from "./gamePresence";
+import { saveChatMessage, sendChatMessage } from "../actions/saveChatMessage";
+import { renderChatMessage } from "../actions/renderChatMessage";
+import { client } from "../supabaseClient";
+import { guessIsCorrect } from "../actions/guessIsCorrect";
 
+if (!client) {
+  console.log("client is not defined");
+}
 const chatMessage = z.object({
   message: z.string(),
-  roomId: z.string().uuid(),
+  gameId: z.string().uuid(),
   userId: z.string().uuid(),
   username: z.string(),
   sentAt: z.string(),
@@ -13,16 +19,24 @@ const chatMessage = z.object({
 const path = window.location.pathname;
 
 const segments = path.split("/");
-export const gameId = segments[2];
+const gameId = segments[2];
 
+const gameChat = client.channel(`gameChat-${gameId}`, {});
+gameChat.subscribe(async (status) => {
+  if (status !== "SUBSCRIBED") {
+    return;
+  }
+});
 document
-  .getElementById("myForm")
+  .getElementById("guessForm")
   .addEventListener("submit", async function (event) {
     event.preventDefault();
 
+    const formData = new FormData(this);
+
     const data = {
       message: formData.get("message"),
-      roomId: gameId,
+      gameId: gameId,
       userId: player[0].id,
       username: player[0].username,
       sentAt: new Date().toISOString(),
@@ -31,13 +45,12 @@ document
     const result = chatMessage.safeParse(data);
 
     if (!result.success) {
-      console.error(message.error);
+      console.error(result.error);
       return;
     }
 
-    const { message, userId, username, sentAt } = result.data;
-    //save message to database
-    gameRoom.send({
+    const { message, userId, username, sentAt, roomId } = result.data;
+    gameChat.send({
       type: "broadcast",
       event: "new-message",
       payload: {
@@ -47,9 +60,25 @@ document
         sentAt,
       },
     });
+
+    const [_, html, isCorrect] = await Promise.all([
+      saveChatMessage({ message, userId, username, sentAt, gameId }),
+      renderChatMessage({ message, userId, username, sentAt }),
+      guessIsCorrect({ message, gameId }),
+    ]);
+
+    if (isCorrect) {
+      console.log("correct guess");
+    } else {
+      console.log("incorrect guess");
+    }
+
+    const chat = document.getElementById("chat");
+
+    chat.insertAdjacentHTML("beforeend", html);
   });
 
-gameRoom.on("broadcast", { event: "new-message" }, ({ payload }) => {
+gameChat.on("broadcast", { event: "new-message" }, async ({ payload }) => {
   console.log("new-message");
 
   const message = payload.message;
@@ -57,7 +86,9 @@ gameRoom.on("broadcast", { event: "new-message" }, ({ payload }) => {
   const userId = payload.userId;
   const sentAt = payload.sentAt;
 
-  //call renderMessage.php
+  const html = await renderChatMessage({ message, userId, username, sentAt });
 
-  // Add message to chat
+  const chat = document.getElementById("chat");
+
+  chat.insertAdjacentHTML("beforeend", html);
 });

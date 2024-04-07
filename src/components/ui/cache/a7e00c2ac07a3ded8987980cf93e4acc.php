@@ -4,5 +4,5 @@
 		file:bg-transparent file:text-sm file:font-medium
 		placeholder:text-muted-foreground focus-visible:outline-none
 		focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2
-		disabled:cursor-not-allowed disabled:opacity-50 font-semibold" />
+		disabled:cursor-not-allowed disabled:opacity-50 font-semibold <?php echo e($class); ?>" />
 <?php /**PATH C:\xampp\htdocs\ecommerce-store\src\components\ui/input.blade.php ENDPATH**/ ?>

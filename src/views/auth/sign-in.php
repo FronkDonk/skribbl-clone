@@ -14,6 +14,7 @@
 
 
     use Jenssegers\Blade\Blade;
+
     $blade = new Blade($_SERVER['DOCUMENT_ROOT'] . '/src/components/ui', $_SERVER['DOCUMENT_ROOT'] . '/src/components/ui/cache');
 
     ?>
@@ -62,6 +63,7 @@
                     <?php
                     echo $blade->make('button', [
                         "label" => "Sign in",
+                        "icon" => false,
                         "type" => "submit",
                         "class" => "w-full",
                     ])->render();
@@ -103,7 +105,7 @@
                 } = await res.json();
                 // Log the response body to the console
                 console.log(data);
-                
+
 
             }
 

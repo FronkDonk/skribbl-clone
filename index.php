@@ -14,6 +14,24 @@ $dispatcher = FastRoute\simpleDispatcher(function (FastRoute\RouteCollector $r) 
     $r->addRoute("POST", "/api/clearPrevDrawers", function () {
         require "src/api/clearPrevDrawers.php";
     });
+    $r->addRoute("GET", "/api/chooseWord", function () {
+        require "src/api/chooseWord.php";
+    });
+    $r->addRoute("POST", "/api/saveWord", function () {
+        require "src/api/saveWord.php";
+    });
+    $r->addRoute("POST", "/api/renderMessage", function () {
+        require "src/api/renderMessage.php";
+    });
+    $r->addRoute("POST", "/api/renderChatMessages", function () {
+        require "src/api/renderChatMessages.php";
+    });
+    $r->addRoute("POST", "/api/guessIsCorrect", function () {
+        require "src/api/guessIsCorrect.php";
+    });
+    $r->addRoute("POST", "/api/saveChatMessage", function () {
+        require "src/api/saveChatMessage.php";
+    });
     $r->addRoute("POST", "/api/addPlayerToGame", function () {
         require "src/api/addPlayerToGame.php";
     });

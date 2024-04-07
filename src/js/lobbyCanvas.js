@@ -1,4 +1,4 @@
-import { client } from "./lobby.js";
+import { client } from "./supabaseClient.js";
 import { gameId } from "./lobby.js";
 const lobbyCanvas = client.channel(`lobbyCanvas-${gameId}`, {
   config: {
@@ -79,7 +79,6 @@ function draw(e) {
     },
   });
 }
-
 
 function replay() {
   for (let command of drawingCommands) {

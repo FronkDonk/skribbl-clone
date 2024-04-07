@@ -3,11 +3,11 @@
           
           use Jenssegers\Blade\Blade;
           
-          $blade = new Blade($_SERVER['DOCUMENT_ROOT'] .'/src/components/ui', $_SERVER['DOCUMENT_ROOT'] .'/src/components/ui/cache');
+          $blade = new Blade($_SERVER['DOCUMENT_ROOT'] . '/src/components/ui', $_SERVER['DOCUMENT_ROOT'] . '/src/components/ui/cache');
           $message = $message ?? '';
           ?>
           <?php if($message): ?>
-              <div id="messageCard" class="p-2 bg-muted rounded-md flex items-center gap-2">
+              <div class="p-2 bg-muted rounded-md flex items-center gap-2">
                   <?php
                   
                   echo $blade
@@ -26,11 +26,10 @@
                               ])
                               ->render();
                           ?>
-                          <!-- date -->
-                          <p class="text-sm text-muted-foreground">9:11pm</p>
+                          <p class="text-sm text-muted-foreground"><?php echo e($sentAt); ?></p>
                       </div>
 
-                      <p id="messageContent" class="text-sm "><?php echo e($message); ?></p>
+                      <p class="text-sm "><?php echo e($message); ?></p>
                   </div>
               </div>
           <?php endif; ?>

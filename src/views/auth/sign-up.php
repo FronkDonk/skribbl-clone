@@ -80,6 +80,8 @@
                                 'type' => 'submit',
                                 'label' => 'Sign up',
                                 'class' => 'w-full',
+                                "icon" => false,
+
                             ])
                             ->render();
                         ?>

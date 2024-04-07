@@ -2,16 +2,15 @@ import { createClient } from "@supabase/supabase-js";
 import { addPlayerToGame } from "../actions/addPlayerToGame.js";
 import { addPrevDrawers } from "../actions/addPrevDrawers.js";
 import { clearPrevDrawers } from "../actions/clearPrevDrawers.js";
-
-export const client = createClient(
-  "https://wzqbaxbadiqwdodpcglt.supabase.co",
-  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Ind6cWJheGJhZGlxd2RvZHBjZ2x0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3MTEyODI2NDAsImV4cCI6MjAyNjg1ODY0MH0.edflXOAsbKYV7nuIQaGteGsAbdFaRjB64PyP0uRKnxw"
-);
+import { updateEventListeners } from "./gameCanvas.js";
+import { client } from "../supabaseClient.js";
+import { chooseWord } from "../actions/chooseWord.js";
+import { saveWord } from "../actions/saveWord.js";
 
 const path = window.location.pathname;
 
 const segments = path.split("/");
-export const gameId = segments[2];
+const gameId = segments[2];
 let currentDrawerIndex = 0;
 let gameIsFinished = false;
 export let players = [
@@ -86,6 +85,7 @@ gameRoom
         });
         console.log(players);
       }
+      updateEventListeners();
       if (!gameIsFinished && userStatus.isOwner && players.length >= 2) {
         startGame(players);
       }
@@ -106,7 +106,7 @@ function startGame(players) {
   if (userStatus.isOwner && players.length >= 2) {
     gameRoom.send({
       type: "broadcast",
-      event: "new-round",
+      event: "choose-word",
       payload: {
         drawerId: players[currentDrawerIndex].id,
       },
@@ -129,15 +129,16 @@ async function startNewRound(prevDrawers) {
           gameIsFinished = true;
           return;
         }
+      } else {
+        gameRoom.send({
+          type: "broadcast",
+          event: "choose-word",
+          payload: {
+            drawerId: players[currentDrawerIndex].id,
+          },
+        });
+        currentDrawerIndex = (currentDrawerIndex + 1) % players.length;
       }
-      gameRoom.send({
-        type: "broadcast",
-        event: "new-round",
-        payload: {
-          drawerId: players[currentDrawerIndex].id,
-        },
-      });
-      currentDrawerIndex = (currentDrawerIndex + 1) % players.length;
     } else {
       console.log("game over");
       //check who has the most score
@@ -145,11 +146,9 @@ async function startNewRound(prevDrawers) {
   }
 }
 
-function startDrawingTime() {
+function startDrawingTime(player) {
   if (userStatus.isOwner) {
     setTimeout(async () => {
-      let player = players.find((player) => player.isDrawing === true);
-      player.isDrawing = false;
       const prevDrawers = await addPrevDrawers(gameId, player.id);
       gameRoom.send({
         type: "broadcast",
@@ -164,12 +163,31 @@ function startDrawingTime() {
 }
 console.log({ drawingTime: userStatus.drawingTime });
 
-gameRoom.on("broadcast", { event: "new-round" }, ({ payload }) => {
-  console.log("new-round", payload);
+gameRoom.on("broadcast", { event: "choose-word" }, async ({ payload }) => {
+  console.log("choose-word", payload);
   const drawerId = payload.drawerId;
   let player = players.find((player) => player.id === drawerId);
-
   player.isDrawing = true;
+  const words = await chooseWord();
+  if (words) {
+    console.log(words);
+    const wordSelection = document.getElementById("wordSelection");
+    for (const subarray of words) {
+      for (const word of subarray) {
+        const wordElement = document.createElement("div");
+        wordElement.textContent = word.name;
+        wordElement.onclick = (e) => handleWordClick(e, player, drawerId);
+        wordSelection.appendChild(wordElement);
+      }
+    }
+  }
+});
+
+gameRoom.on("broadcast", { event: "new-round" }, async ({ payload }) => {
+  console.log("new-round", payload);
+  const player = payload.player;
+
+  updateEventListeners();
   startDrawingTime(player);
 });
 
@@ -178,13 +196,22 @@ gameRoom.on("broadcast", { event: "times-up" }, ({ payload }) => {
   const drawerId = payload.drawerId;
   prevDrawers = payload.previousDrawers;
   let player = players.find((player) => player.id === drawerId);
-  player.isDrawing = false;
-
+  if (player) {
+    player.isDrawing = false;
+  }
+  updateEventListeners();
   startNewRound(prevDrawers);
 });
 
-const clientPlayer = players.find((player) => player.isClient === true);
-
-if (clientPlayer.isDrawing) {
-  console.log("you are drawing enable event listeners for drawing");
+function handleWordClick(e, player, drawerId) {
+  const word = e.target.textContent;
+  saveWord({ word, gameId });
+  gameRoom.send({
+    type: "broadcast",
+    event: "new-round",
+    payload: {
+      drawerId: drawerId,
+      player: player,
+    },
+  });
 }
