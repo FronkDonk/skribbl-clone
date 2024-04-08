@@ -19,9 +19,14 @@
 
     ?>
     <main class="min-h-screen p-6 flex justify-center items-center">
-        <div class="flex" id="wordSelection">
-            
+        <div class="rounded-lg border bg-card text-card-foreground shadow-sm">
+            <div class="flex flex-col space-y-1.5 p-6">
+                <div id="wordSelection" class="text-2xl font-semibold leading-none tracking-tight">
+
+                </div>
+            </div>
         </div>
+
         <section id="section" class="flex justify-center gap-5 w-full  max-w-[100rem] ">
             <div class="w-[70%]">
                 <div class="bg-muted rounded-lg">
