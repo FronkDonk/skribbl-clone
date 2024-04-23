@@ -112,7 +112,8 @@
                         echo $blade->make('button', [
                             "label" => "Create game",
                             "type" => "submit",
-                            "id" => "startGame"
+                            "id" => "startGame",
+                            "icon" => false
                         ])->render();
 
                         ?>

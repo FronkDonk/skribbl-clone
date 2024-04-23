@@ -1,4 +1,5 @@
 <?php
+
 use Respect\Validation\Validator as v;
 
 require $_SERVER['DOCUMENT_ROOT'] . '/vendor/autoload.php';
@@ -32,6 +33,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     try {
         $existingGame = $gameRoom->findBy("id", $_POST["gameId"])->getResult();
+        //SELECT * FROM game_room WHERE id = $_POST["gameId"];
         if (!$existingGame) {
             http_response_code(404);
             echo json_encode(["message" => 'Game not found']);
@@ -43,7 +45,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $client->sadd("gameMembers:{$_POST["gameId"]}", $userId);
         }
         $gameRoomData = $gameRoom->findBy("id", $_POST["gameId"])->getResult();
+        //SELECT * FROM game_room WHERE id = $_POST["gameId"];
         $existingPlayer = $roomPlayers->findBy("id", $userId)->getResult();
+        //SELECT * FROM room_players WHERE id = $userId;
         if ($existingPlayer) {
             http_response_code(200);
             echo json_encode(['message' => 'Success', 'player' => $existingPlayer, "gameRoom" => $gameRoomData]);
@@ -51,7 +55,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
         //no existing player, create new player
         //create new player
-/*         $userData = $auth->getUser($accessToken);
+        /*         $userData = $auth->getUser($accessToken);
  */        //fetch game room data
         $adjectives = ["Cheerful", "Jolly", "Daring", "Brave", "Lucky", "Funky", "Jazzy", "Energetic", "Breezy", "Giggly"];
         $nouns = ["Unicorn", "Rainbow", "Puppy", "Kitten", "Dolphin", "Butterfly", "Bumblebee", "Cupcake", "Sunflower", "Starfish"];
@@ -73,6 +77,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         ];
 
         $player = $roomPlayers->insert($newPlayer);
+        //INSERT INTO room_players (id, username, game_room_id, score, isOwner) VALUES ($userId, $newPlayer["username"], $_POST["gameId"], 0, $newPlayer["isOwner"]);
 
         http_response_code(200);
         echo json_encode(['message' => 'New player created', 'player' => $player, "gameRoom" => $gameRoomData]);

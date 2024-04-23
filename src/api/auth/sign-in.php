@@ -1,6 +1,5 @@
 <?php
 
-use Respect\Validation\Validator as v;
 
 require $_SERVER['DOCUMENT_ROOT'] . '/vendor/autoload.php';
 
@@ -9,8 +8,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $validator = new Validator();
 
     $errors = $validator->validate([
-        'email' => v::notEmpty()->email(),
-        'password' => v::notEmpty()->noWhitespace(),
+        'email' => v::notEmpty()->email()->setValue($_POST['email']),
+        'password' => v::notEmpty()->setValue($_POST['password'])
     ], $_POST);
     header('Content-Type: application/json');
 
