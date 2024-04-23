@@ -50,6 +50,21 @@ document
     }
 
     const { message, userId, username, sentAt, roomId } = result.data;
+
+    const chat = document.getElementById("chat");
+    const div = `
+    <div>
+        <div class="flex items-center gap-2 ">
+            <label class="text-base">${username}</label>
+            <p class="text-sm text-muted-foreground">${sentAt}</p>
+        </div>
+
+        <p class="text-sm ">${message}</p>
+    </div>
+`;
+
+    chat.insertAdjacentHTML("beforeend", div);
+
     gameChat.send({
       type: "broadcast",
       event: "new-message",
@@ -61,10 +76,10 @@ document
       },
     });
 
-    const [_, html, isCorrect] = await Promise.all([
+    const [_, isCorrect] = await Promise.all([
       saveChatMessage({ message, userId, username, sentAt, gameId }),
-      renderChatMessage({ message, userId, username, sentAt }),
-      guessIsCorrect({ message, gameId }),
+      /*       renderChatMessage({ message, userId, username, sentAt }),
+       */ guessIsCorrect({ message, gameId }),
     ]);
 
     if (isCorrect) {
@@ -72,13 +87,9 @@ document
     } else {
       console.log("incorrect guess");
     }
-
-    const chat = document.getElementById("chat");
-
-    chat.insertAdjacentHTML("beforeend", html);
   });
 
-gameChat.on("broadcast", { event: "new-message" }, async ({ payload }) => {
+gameChat.on("broadcast", { event: "new-message" }, ({ payload }) => {
   console.log("new-message");
 
   const message = payload.message;
@@ -86,9 +97,18 @@ gameChat.on("broadcast", { event: "new-message" }, async ({ payload }) => {
   const userId = payload.userId;
   const sentAt = payload.sentAt;
 
-  const html = await renderChatMessage({ message, userId, username, sentAt });
-
   const chat = document.getElementById("chat");
 
-  chat.insertAdjacentHTML("beforeend", html);
+  const div = `
+  <div>
+      <div class="flex items-center gap-2 ">
+          <label class="text-base">${username}</label>
+          <p class="text-sm text-muted-foreground">${sentAt}</p>
+      </div>
+
+      <p class="text-sm ">${message}</p>
+  </div>
+`;
+
+  chat.insertAdjacentHTML("beforeend", div);
 });
