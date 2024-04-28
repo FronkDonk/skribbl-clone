@@ -1,4 +1,3 @@
-import { createClient } from "@supabase/supabase-js";
 import { getUserData } from "./actions/getUserData.js";
 import { client } from "./supabaseClient.js";
 

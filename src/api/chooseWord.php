@@ -19,15 +19,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
         for ($i = 0; $i < 3; $i++) {
             $randomNumber = rand(1, 36);
             $words[] = $db->findBy("id", $randomNumber)->getResult();
+            //SELECT name FROM words WHERE id = randomNumber;
+
         }
         list($word1, $word2, $word3) = $words;
         http_response_code(200);
-        echo json_encode(['message' => 'Success', 'words' => [$word1, $word2, $word3]]);
+        echo json_encode(['message' => 'Success', "words" => [$word1, $word2, $word3]]);
         exit;
     } catch (Exception $e) {
         http_response_code(500);
         echo json_encode(['message' => $e->getMessage()]);
         exit;
     }
-
 }

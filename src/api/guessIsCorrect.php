@@ -1,5 +1,6 @@
 <?php
 require $path = $_SERVER['DOCUMENT_ROOT'] . '/vendor/autoload.php';
+
 use Respect\Validation\Validator as v;
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -20,7 +21,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     require $_SERVER['DOCUMENT_ROOT'] . "/src/db/redis.php";
     try {
         $word = $client->get("game:{$_POST['gameId']}:word");
-        if ($word == $_POST["message"]) {
+        if (strtolower($word) == strtolower($_POST["message"])) {
             http_response_code(200);
             echo json_encode(["isCorrect" => true]);
             exit;
@@ -35,11 +36,3 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         exit;
     }
 }
-
-
-
-
-
-
-
-

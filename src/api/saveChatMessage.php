@@ -1,5 +1,6 @@
 <?php
 require $path = $_SERVER['DOCUMENT_ROOT'] . '/vendor/autoload.php';
+
 use Respect\Validation\Validator as v;
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -32,6 +33,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     try {
         $db->insert($newMessage);
+        // INSERT INTO room_messages (message, user_id, sent_at, room_id) 
+        // VALUES ($_POST["message"], $_POST["userId"], $_POST["sentAt"], $_POST["gameId"])
         http_response_code(200);
         echo json_encode(['message' => 'Success']);
         exit;
@@ -41,11 +44,3 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         exit;
     }
 }
-
-
-
-
-
-
-
-
