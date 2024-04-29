@@ -9,8 +9,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $validator = new Validator();
 
     $errors = $validator->validate([
-        "message" => v::notEmpty()->stringVal(),
-        "gameId" => v::notEmpty()->uuid(),
+        "message" => [$validator->notEmpty(), $validator->stringType()],
+        "gameId" => [$validator->notEmpty(), $validator->uuid()],
     ], $_POST);
 
     if (!empty($errors)) {

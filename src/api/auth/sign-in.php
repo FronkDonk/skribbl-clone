@@ -8,22 +8,36 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $validator = new Validator();
 
     $errors = $validator->validate([
-        'email' => v::notEmpty()->email()->setValue($_POST['email']),
-        'password' => v::notEmpty()->setValue($_POST['password'])
+        'email' => [$validator->notEmpty(), $validator->email(), $validator->htmlspecialchars()],
+        'password' => [$validator->notEmpty(), $validator->htmlspecialchars()],
     ], $_POST);
+    $errors = null;
     header('Content-Type: application/json');
 
     if (empty($errors)) {
-        require $_SERVER['DOCUMENT_ROOT'] . "/src/db/supabase.php";
-        $auth = $service->createAuth();
-
+        require $_SERVER['DOCUMENT_ROOT'] . "/src/db/db.php";
         try {
-            $auth->signInWithEmailAndPassword($_POST["email"], $_POST["password"]);
-            $data = $auth->data();
-            $_SESSION['access_token'] = $data->access_token;
-            $_SESSION['userId'] = $data->user->id;
+            $existingUser = $db->prepare("SELECT * FROM users WHERE email = :email");
+            $existingUser->bindValue(':email', $_POST["email"]);
+            $existingUser->execute();
+            $data = $existingUser->fetch();
+            if (!$data) {
+                http_response_code(400);
+                echo json_encode(['message' => 'User does not exist']);
+                exit;
+            }
+            $passwordIsValid = password_verify($_POST["password"], $data["password"]);
+
+            if (!$passwordIsValid) {
+                http_response_code(400);
+                echo json_encode(['message' => 'Invalid password']);
+                exit;
+            }
+
+
+            $_SESSION['userId'] = $data["id"];
             http_response_code(200);
-            echo json_encode(['message' => 'Success', 'data' => $data]);
+            echo json_encode(['message' => 'Success']);
             exit;
         } catch (Exception $e) {
             http_response_code(500);
@@ -34,8 +48,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         }
     } else {
         http_response_code(400);
-        echo json_encode($errors);
-
+        echo json_encode(['message' => 'FEsk', 'errors' => $errors]);
         exit;
     }
 }

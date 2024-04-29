@@ -1,7 +1,6 @@
 import * as z from "zod";
 import { player } from "./gamePresence";
 import { saveChatMessage, sendChatMessage } from "../actions/saveChatMessage";
-import { renderChatMessage } from "../actions/renderChatMessage";
 import { client } from "../supabaseClient";
 import { guessIsCorrect } from "../actions/guessIsCorrect";
 
@@ -52,18 +51,24 @@ document
     const { message, userId, username, sentAt, roomId } = result.data;
 
     const chat = document.getElementById("chat");
+    const input = document.getElementById("message");
     const div = `
-    <div>
-        <div class="flex items-center gap-2 ">
-            <label class="text-base">${username}</label>
-            <p class="text-sm text-muted-foreground">${sentAt}</p>
-        </div>
+  <div class="p-2 bg-muted rounded-md flex items-center gap-2">
 
-        <p class="text-sm ">${message}</p>
-    </div>
+  <div class="relative flex flex-col gap-2 h-10 w-10 shrink-0 overflow-hidden rounded-full bg-gradient-to-tr from-[#7FB2FF] to-[#FF7F7F]"></div>
+
+      <div class="flex flex-col gap-px ">
+          <label class="text-base">${username}</label>
+     
+
+      <p class="text-sm ">${message}</p>
+       </div>
+  </div>
+  </div>
 `;
 
     chat.insertAdjacentHTML("beforeend", div);
+    input.value = "";
 
     gameChat.send({
       type: "broadcast",
@@ -78,8 +83,7 @@ document
 
     const [_, isCorrect] = await Promise.all([
       saveChatMessage({ message, userId, username, sentAt, gameId }),
-      /*       renderChatMessage({ message, userId, username, sentAt }),
-       */ guessIsCorrect({ message, gameId }),
+      guessIsCorrect({ message, gameId }),
     ]);
 
     if (isCorrect) {
@@ -100,13 +104,17 @@ gameChat.on("broadcast", { event: "new-message" }, ({ payload }) => {
   const chat = document.getElementById("chat");
 
   const div = `
-  <div>
-      <div class="flex items-center gap-2 ">
+  <div class="p-2 bg-muted rounded-md flex items-center gap-2">
+
+  <div class="relative flex flex-col gap-2 h-10 w-10 shrink-0 overflow-hidden rounded-full bg-gradient-to-tr from-[#7FB2FF] to-[#FF7F7F]"></div>
+
+      <div class="flex flex-col gap-px ">
           <label class="text-base">${username}</label>
-          <p class="text-sm text-muted-foreground">${sentAt}</p>
-      </div>
+     
 
       <p class="text-sm ">${message}</p>
+       </div>
+  </div>
   </div>
 `;
 

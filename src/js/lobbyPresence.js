@@ -33,7 +33,7 @@ gameRoom
           isClient: value[0].user === id ? true : false,
           owner: false,
         });
-        //display user in the lobby
+        renderOnlineUsers(players);
       }
     });
 
@@ -54,7 +54,6 @@ gameRoom
 
     document.getElementById("startGame").disabled = true;
     enableStartButton(players);
-    renderOnlineUsers(players);
     ownerOrPlayerView(players);
   })
   .on("presence", { event: "join" }, ({ key, newPresences }) => {

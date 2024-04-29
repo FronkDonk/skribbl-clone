@@ -601,6 +601,10 @@ video {
   }
 }
 
+.static {
+  position: static;
+}
+
 .absolute {
   position: absolute;
 }
@@ -632,6 +636,10 @@ video {
 
 .mt-4 {
   margin-top: 1rem;
+}
+
+.mt-5 {
+  margin-top: 1.25rem;
 }
 
 .block {
@@ -698,10 +706,6 @@ video {
   height: 100svh;
 }
 
-.h-9 {
-  height: 2.25rem;
-}
-
 .max-h-full {
   max-height: 100%;
 }
@@ -730,8 +734,8 @@ video {
   width: 350px;
 }
 
-.w-\[70\%\] {
-  width: 70%;
+.w-\[80\%\] {
+  width: 80%;
 }
 
 .w-full {
@@ -742,8 +746,28 @@ video {
   min-width: 40%;
 }
 
-.max-w-\[100rem\] {
-  max-width: 100rem;
+.max-w-6xl {
+  max-width: 72rem;
+}
+
+.max-w-5xl {
+  max-width: 64rem;
+}
+
+.max-w-4xl {
+  max-width: 56rem;
+}
+
+.max-w-3xl {
+  max-width: 48rem;
+}
+
+.max-w-2xl {
+  max-width: 42rem;
+}
+
+.max-w-xl {
+  max-width: 36rem;
 }
 
 .shrink-0 {
@@ -770,6 +794,10 @@ video {
 
 .items-center {
   align-items: center;
+}
+
+.justify-start {
+  justify-content: flex-start;
 }
 
 .justify-end {
@@ -806,6 +834,10 @@ video {
 
 .gap-px {
   gap: 1px;
+}
+
+.gap-10 {
+  gap: 2.5rem;
 }
 
 .space-y-1 > :not([hidden]) ~ :not([hidden]) {
@@ -862,6 +894,14 @@ video {
 
 .border-input {
   border-color: hsl(var(--input));
+}
+
+.border-muted-foreground {
+  border-color: hsl(var(--muted-foreground));
+}
+
+.border-muted {
+  border-color: hsl(var(--muted));
 }
 
 .bg-background {
@@ -1003,6 +1043,16 @@ video {
   padding-bottom: 0.75rem;
 }
 
+.px-2 {
+  padding-left: 0.5rem;
+  padding-right: 0.5rem;
+}
+
+.py-1 {
+  padding-top: 0.25rem;
+  padding-bottom: 0.25rem;
+}
+
 .pl-12 {
   padding-left: 3rem;
 }
@@ -1084,6 +1134,10 @@ video {
 
 .text-primary-foreground {
   color: hsl(var(--primary-foreground));
+}
+
+.text-muted {
+  color: hsl(var(--muted));
 }
 
 .underline {

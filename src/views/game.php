@@ -18,12 +18,11 @@
     $blade = new Blade($_SERVER['DOCUMENT_ROOT'] . '/src/components/ui', $_SERVER['DOCUMENT_ROOT'] . '/src/components/ui/cache');
 
     ?>
-    <main class="min-h-screen ">
-        <div class="p-6 flex justify-center items-center">
+    <main class="min-h-screen p-6  flex justify-center">
 
-
-            <section id="section" class="flex justify-center gap-5 w-full  max-w-[100rem] ">
-                <div class="w-[70%]">
+        <section id="section" class="w-full flex flex-col items-center">
+            <div class="flex w-full gap-5">
+                <div class="w-[80%]">
                     <div class="bg-muted rounded-lg">
                         <canvas id="gameCanvas" class="aspect-video w-full"></canvas>
                     </div>
@@ -50,18 +49,13 @@
                         </form>
                     </div>
                 </div>
-            </section>
-        </div>
-        <!--   <div class="rounded-lg border bg-card text-card-foreground shadow-sm">
-            <div class="flex flex-col space-y-1.5 p-6">
-                <div id="wordSelection" class="text-2xl font-semibold leading-none tracking-tight">
-                    hej
-                </div>
             </div>
-        </div> -->
-        <div class="flex gap-2" id="wordSelection">
+            <div class=" gap-2 w-full flex justify-start" id="wordSelection">
 
-        </div>
+            </div>
+        </section>
+
+
     </main>
     <script src="/dist/game.bundle.js"></script>
 </body>

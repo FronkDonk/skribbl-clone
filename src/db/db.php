@@ -28,7 +28,7 @@ $host = "aws-0-eu-central-1.pooler.supabase.com";
 $name = "postgres";
 $port = 5432;
 $user = "postgres.wzqbaxbadiqwdodpcglt";
-$password = "J%3!$qo6x#!S8o5Y@iJVTmt8BJ4G@TU97RyirUW29bamcUg@JDYrhod3$fBzXH6sKoQ8g3YRzmo&pnfR6bzzFD9yGJgxG8yZfq6";
+$password = "slate-skyline-unwary-grimace-overreach-mooned-purging-wildness-alienate-reawake-yield";
 
 $dsn = "pgsql:host=$host;dbname=$name;port=$port";
 $opt = [
@@ -37,3 +37,5 @@ $opt = [
     PDO::ATTR_EMULATE_PREPARES => false,
 ];
 $db = new PDO($dsn, $user, $password, $opt);
+
+

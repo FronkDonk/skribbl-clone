@@ -1,137 +1,83 @@
 <?php
 
-class NestedValidationException extends Exception
-{
-    private $messages;
-
-    public function __construct($messages, $code = 0, Exception $previous = null)
-    {
-        parent::__construct("", $code, $previous);
-        $this->messages = $messages;
-    }
-
-    public function getMessages()
-    {
-        return $this->messages;
-    }
-}
-
 class Validator
 {
-    public function validate($rules, $data)
-    {
-        $errors = [];
-
-        foreach ($rules as $field => $rule) {
-            try {
-                $rule->assert($data[$field]);
-            } catch (NestedValidationException $e) {
-                $errors[$field] = $e->getMessages();
-            }
-        }
-
-        return $errors;
-    }
-}
-
-class valid
-{
-    private $value;
-
-    public function setValue($value)
-    {
-        $this->value = $value;
-        return $this;
-    }
-
-    public function assert($value, $fieldName)
-    {
-        if ($this->value !== $value) {
-            throw new NestedValidationException(["Invalid value for $fieldName"]);
-        }
-    }
-
-
-
     public function notEmpty()
     {
-        if (empty($this->value)) {
-            throw new Exception('Value cannot be empty');
-        }
-        return $this;
+        return function ($data) {
+            return !empty ($data) ? true : "Data cannot be empty";
+        };
     }
 
-    public function stringType()
+
+    public function minLength($min)
     {
-        if (!is_string($this->value)) {
-            throw new Exception('Value must be a string');
-        }
-        return $this;
+        return function ($data) use ($min) {
+            return strlen($data) >= $min ? true : "Data is too short";
+        };
+    }
+
+    public function maxLength($max)
+    {
+        return function ($data) use ($max) {
+            return strlen($data) <= $max ? true : "Data is too long";
+        };
     }
 
     public function email()
     {
-        if (!filter_var($this->value, FILTER_VALIDATE_EMAIL)) {
-            throw new Exception('Invalid email format');
-        }
-        return $this;
+        return function ($data) {
+            return filter_var($data, FILTER_VALIDATE_EMAIL) ? true : "Data is not a valid email";
+        };
+    }
+
+    public function in($values)
+    {
+        return function ($data) use ($values) {
+            return in_array($data, $values) ? true : "Data is not in the allowed values";
+        };
     }
 
     public function uuid()
     {
-        if (!preg_match('/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i', $this->value)) {
-            throw new Exception('Invalid UUID');
-        }
-        return $this;
+        return function ($data) {
+            return preg_match('/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i', $data) ? true : "Data is not a valid UUID";
+        };
     }
 
     public function intVal()
     {
-        if (!is_int($this->value)) {
-            throw new Exception('Value must be an integer');
-        }
-        return $this;
+        return function ($data) {
+            return is_int($data) ? true : "Data is not an integer";
+        };
     }
 
-    public function in(array $choices)
+    public function stringType()
     {
-        if (!in_array($this->value, $choices, true)) {
-            throw new Exception('Invalid value');
+        return function ($data) {
+            return is_string($data) ? true : "Data is not a string";
+        };
+    }
+
+    public function htmlspecialchars()
+    {
+        return function ($data) {
+            return htmlspecialchars($data);
+        };
+    }
+    public function validate($fields, $data)
+    {
+        $errors = [];
+        foreach ($fields as $field => $rules) {
+            foreach ($rules as $rule) {
+                $result = $rule($data[$field]);
+                if ($result !== true) {
+                    $errors[$field] = $result;
+                    break;
+                }
+            }
         }
-        return $this;
+        return $errors;
     }
 }
 
-
-class v
-{
-    public static function notEmpty()
-    {
-        return (new valid())->notEmpty();
-    }
-
-    public static function stringType()
-    {
-        return (new valid())->stringType();
-    }
-
-    public static function email()
-    {
-        return (new valid())->email();
-    }
-
-    public static function uuid()
-    {
-        return (new valid())->uuid();
-    }
-
-    public static function intVal()
-    {
-        return (new valid())->intVal();
-    }
-
-    public static function in(array $choices)
-    {
-        return (new valid())->in($choices);
-    }
-}

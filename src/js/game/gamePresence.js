@@ -172,41 +172,39 @@ gameRoom.on("broadcast", { event: "choose-word" }, async ({ payload }) => {
   if (words) {
     console.log(words);
     const wordSelection = document.getElementById("wordSelection");
-    for (const subarray of words) {
-      for (const word of subarray) {
-        // Create a new button element
-        const button = document.createElement("button");
+    for (const word of words) {
+      // Create a new button element
+      const button = document.createElement("button");
 
-        // Add classes
-        button.classList.add(
-          "inline-flex",
-          "items-center",
-          "justify-center",
-          "whitespace-nowrap",
-          "rounded-md",
-          "text-sm",
-          "font-medium",
-          "ring-offset-background",
-          "transition-colors",
-          "focus-visible:outline-none",
-          "focus-visible:ring-2",
-          "focus-visible:ring-ring",
-          "focus-visible:ring-offset-2",
-          "disabled:pointer-events-none",
-          "disabled:opacity-50",
-          "border",
-          "border-input",
-          "bg-background",
-          "hover:bg-accent",
-          "hover:text-accent-foreground",
-          "h-10",
-          "px-4",
-          "py-2"
-        );
-        button.textContent = word.name;
-        button.onclick = (e) => handleWordClick(e, player, drawerId);
-        wordSelection.appendChild(button);
-      }
+      // Add classes
+      button.classList.add(
+        "inline-flex",
+        "items-center",
+        "justify-center",
+        "whitespace-nowrap",
+        "rounded-md",
+        "text-sm",
+        "font-medium",
+        "ring-offset-background",
+        "transition-colors",
+        "focus-visible:outline-none",
+        "focus-visible:ring-2",
+        "focus-visible:ring-ring",
+        "focus-visible:ring-offset-2",
+        "disabled:pointer-events-none",
+        "disabled:opacity-50",
+        "border",
+        "border-input",
+        "bg-background",
+        "hover:bg-accent",
+        "hover:text-accent-foreground",
+        "h-10",
+        "px-4",
+        "py-2"
+      );
+      button.textContent = word;
+      button.onclick = (e) => handleWordClick(e, player, drawerId);
+      wordSelection.appendChild(button);
     }
   }
 });

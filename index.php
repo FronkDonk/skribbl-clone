@@ -42,7 +42,7 @@ $dispatcher = FastRoute\simpleDispatcher(function (FastRoute\RouteCollector $r) 
         require "src/views/game.php";
     });
     $r->addRoute('GET', '/new-game/{id}', function ($id) {
-        require "src/views/new-game.php";
+        require "src/views/new-game2.php";
     });
     $r->addRoute('POST', '/new-game/{id}', function ($id) {
         require "src/api/new-game.php";

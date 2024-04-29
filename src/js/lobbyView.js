@@ -22,34 +22,16 @@ export function enableStartButton(players) {
 }
 
 export async function renderOnlineUsers(players) {
-  let elements = document.getElementsByClassName("onlineUsers");
-  for (let i = 0; i < elements.length; i++) {
-    elements[i].innerHTML = "";
-  }
-  console.log("players", players);
   players.forEach(async (player) => {
-    const response = await fetch("/api/renderOnlineUsers", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/x-www-form-urlencoded",
-      },
-      body: `owner=${encodeURIComponent(
-        player.owner
-      )}&username=${encodeURIComponent(
-        player.username
-      )}&isClient=${encodeURIComponent(player.isClient)}`,
-    });
+    const players = document.getElementById("players");
 
-    if (!response.ok) {
-      console.error("Failed to fetch rendered HTML");
-      return;
-    }
+    const div = `
+   <article class="flex px-2 py-1 items-center gap-2 border-2 border-input rounded-lg">
+        <div class="relative flex h-10 w-10 shrink-0 overflow-hidden rounded-full bg-gradient-to-tr from-[#7FB2FF] to-[#FF7F7F]">
+          <p class="font-medium text-lg">${player.username}</p>
+    </article>
+`;
 
-    const html = await response.text();
-
-    // Insert the rendered HTML at the end of the chat messages container
-    for (let i = 0; i < elements.length; i++) {
-      elements[i].insertAdjacentHTML("beforeend", html);
-    }
+    players.insertAdjacentHTML("beforeend", div);
   });
 }

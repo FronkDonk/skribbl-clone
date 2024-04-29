@@ -10,16 +10,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
         exit;
     }
 
-    require $_SERVER['DOCUMENT_ROOT'] . '/src/db/supabase.php';
+    require $_SERVER['DOCUMENT_ROOT'] . '/src/db/db.php';
 
-    $db = $service->initializeDatabase("words");
-
+    /*     $db = $service->initializeDatabase("words");
+     */
     try {
         $words = [];
         for ($i = 0; $i < 3; $i++) {
             $randomNumber = rand(1, 36);
-            $words[] = $db->findBy("id", $randomNumber)->getResult();
-            //SELECT name FROM words WHERE id = randomNumber;
+            /*             $words[] = $db->findBy("id", $randomNumber)->getResult();
+             */
+            $query = $db->prepare("SELECT name FROM words WHERE id = :randomNumber");
+            $query->bindValue(':randomNumber', $randomNumber);
+            $query->execute();
+            $words[] = $query->fetchColumn();
 
         }
         list($word1, $word2, $word3) = $words;

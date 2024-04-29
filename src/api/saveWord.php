@@ -1,15 +1,14 @@
 <?php
 require $path = $_SERVER['DOCUMENT_ROOT'] . '/vendor/autoload.php';
-use Respect\Validation\Validator as v;
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     require $_SERVER['DOCUMENT_ROOT'] . '/src/validators/index.php';
 
     $validator = new Validator();
 
-    $errors = $validator->validate([
-        "word" => v::notEmpty()->stringVal(),
-        "gameId" => v::notEmpty()->uuid(),
+    $error = $validator->validate([
+        "word" => [$validator->notEmpty(), $validator->stringType()],
+        "gameId" => [$validator->notEmpty(), $validator->uuid()],
     ], $_POST);
 
     if (!empty($errors)) {

@@ -11,7 +11,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 
     $errors = $validator->validate([
-        "gameId" => v::notEmpty()->uuid(),
+        "gameId" => [$validator->notEmpty(), $validator->uuid()],
     ], $_POST);
 
     header('Content-Type: application/json');
@@ -56,7 +56,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         //no existing player, create new player
         //create new player
         /*         $userData = $auth->getUser($accessToken);
- */        //fetch game room data
+         */        //fetch game room data
         $adjectives = ["Cheerful", "Jolly", "Daring", "Brave", "Lucky", "Funky", "Jazzy", "Energetic", "Breezy", "Giggly"];
         $nouns = ["Unicorn", "Rainbow", "Puppy", "Kitten", "Dolphin", "Butterfly", "Bumblebee", "Cupcake", "Sunflower", "Starfish"];
 
