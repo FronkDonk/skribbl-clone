@@ -9,7 +9,7 @@ $dispatcher = FastRoute\simpleDispatcher(function (FastRoute\RouteCollector $r) 
     $r->addRoute('GET', '/game', function () {
         $uuid = \Ramsey\Uuid\Uuid::uuid4();
         header("Location: /new-game/{$uuid->toString()}");
-        exit ();
+        exit();
     });
     $r->addRoute("POST", "/api/clearPrevDrawers", function () {
         require "src/api/clearPrevDrawers.php";
@@ -55,7 +55,7 @@ $dispatcher = FastRoute\simpleDispatcher(function (FastRoute\RouteCollector $r) 
         $uuid = \Ramsey\Uuid\Uuid::uuid4();
 
         header("Location: /new-game/{$uuid->toString()}");
-        exit ();
+        exit();
     });
     $r->addRoute("GET", "/src/actions/getUserData", function () {
         require "src/js/actions/getUserData.js";
@@ -81,7 +81,6 @@ $dispatcher = FastRoute\simpleDispatcher(function (FastRoute\RouteCollector $r) 
     $r->addRoute("POST", "/api/auth/sign-up", function () {
         require "src/api/auth/sign-up.php";
     });
-
 });
 
 // Fetch method and URI from somewhere
@@ -113,7 +112,7 @@ $isApiAuthRoute = strpos($uri, $apiAuthPrefix) === 0;
 $isPublicRoute = in_array($uri, $publicRoutes);
 $isAuthRoute = in_array($uri, $authRoutes);
 $defaultSignInRedirect = "/";
-$isSignedIn = isset($_SESSION["access_token"]);
+$isSignedIn = isset($_SESSION["userId"]);
 
 switch ($routeInfo[0]) {
     case FastRoute\Dispatcher::NOT_FOUND:
@@ -160,5 +159,4 @@ switch ($routeInfo[0]) {
 
         $handler($vars);
         break;
-
 }

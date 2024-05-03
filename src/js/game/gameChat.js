@@ -34,11 +34,8 @@ document
     const formData = new FormData(this);
 
     const data = {
-      message: formData.get("message"),
-      gameId: gameId,
-      userId: player[0].id,
-      username: player[0].username,
-      sentAt: new Date().toISOString(),
+      email: formData.get("email"),
+      password: formData.get("password"),
     };
 
     const result = chatMessage.safeParse(data);

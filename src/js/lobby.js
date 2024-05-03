@@ -21,12 +21,7 @@ export const gameRoom = client.channel(`game-${gameId}`, {
     },
   },
 });
-const usernames = [
-  "John Doe",
-  "Mr. Penisman",
-  "The Real Slim Shady",
-  "The Fake Slim Shady",
-];
+const usernames = ["John Doe", "The Real Slim Shady", "The Fake Slim Shady"];
 
 const userStatus = {
   username: usernames[Math.floor(Math.random() * usernames.length)],

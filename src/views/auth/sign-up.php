@@ -27,7 +27,7 @@
                         <span class=" text-accent text-5xl"></span>
                     </p>
                 </div>
-                <form id="myForm" method="post" class="grid gap-4">
+                <form id="signUpForm" method="post" class="grid gap-4">
                     <div class="grid gap-2">
                         <?php
                         echo $blade
@@ -53,7 +53,7 @@
                         echo $blade
                             ->make('input', [
                                 'name' => 'email',
-                                'type' => 'email',
+                                'type' => 'text',
                             ])
                             ->render();
                         ?>
@@ -96,36 +96,11 @@
             </div>
         </div>
         <div class="hidden bg-muted lg:block">
-            <img src="/placeholder.svg" alt="Image"
-                class="h-full w-full object-cover dark:brightness-[0.2] dark:grayscale" />
+            <img src="/placeholder.svg" alt="Image" class="h-full w-full object-cover dark:brightness-[0.2] dark:grayscale" />
         </div>
     </div>
 
-    <script>
-        document.getElementById('myForm').addEventListener('submit', async function (event) {
-            event.preventDefault(); // Prevent the form from being submitted normally
-
-            const formData = new FormData(this); // Create a FormData object from the form
-
-            // Send the form data to the server with fetch
-            const res = await fetch('/api/auth/sign-up', {
-                method: 'POST',
-                body: formData
-            })
-            if (!res.ok) {
-                throw new Error(`HTTP error! status: ${res.status}`);
-            } else {
-                const {
-                    data
-                } = await res.json();
-                // Log the response body to the console
-                console.log(data);
-
-            }
-
-
-        });
-    </script>
+    <script src="/dist/signUp.bundle.js"></script>
 </body>
 
 </html>

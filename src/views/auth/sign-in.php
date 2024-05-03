@@ -27,7 +27,7 @@
                         Enter your email below to sign in to your account
                     </p>
                 </div>
-                <form id="myForm" method="post" class="grid gap-4">
+                <form id="signInForm" method="post" class="grid gap-4">
                     <div class="grid gap-2">
                         <?php
                         echo $blade->make('label', [
@@ -79,39 +79,11 @@
             </div>
         </div>
         <div class="hidden bg-muted lg:block">
-            <img src="/placeholder.svg" alt="Image" width="1920" height="1080"
-                class="h-full w-full object-cover dark:brightness-[0.2] dark:grayscale" />
+            <img src="/placeholder.svg" alt="Image" width="1920" height="1080" class="h-full w-full object-cover dark:brightness-[0.2] dark:grayscale" />
         </div>
     </div>
-    <script>
-        document.getElementById('myForm').addEventListener('submit', async function (event) {
-            event.preventDefault(); // Prevent the form from being submitted normally
+    <script src="/dist/signIn.bundle.js"></script>
 
-            const formData = new FormData(this); // Create a FormData object from the form
-
-            // Send the form data to the server with fetch
-            const res = await fetch('/api/auth/sign-in', {
-                method: 'POST',
-                body: formData
-            })
-            if (!res.ok) {
-
-                const data
-                    = await res.json();
-                console.log(`Error: ${data.message}`);
-            } else {
-                const {
-                    data
-                } = await res.json();
-                // Log the response body to the console
-                console.log(data);
-
-
-            }
-
-
-        });
-    </script>
 </body>
 
 </html>
