@@ -159,9 +159,4 @@ switch ($routeInfo[0]) {
 
         $handler($vars);
         break;
-<<<<<<< Updated upstream
 }
-=======
-
-} */
->>>>>>> Stashed changes
