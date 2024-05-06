@@ -1,5 +1,5 @@
 <?php
-session_start();
+/* session_start();
 require "vendor/autoload.php";
 $dispatcher = FastRoute\simpleDispatcher(function (FastRoute\RouteCollector $r) {
     $r->addRoute('GET', '/', function () {
@@ -159,4 +159,9 @@ switch ($routeInfo[0]) {
 
         $handler($vars);
         break;
+<<<<<<< Updated upstream
 }
+=======
+
+} */
+>>>>>>> Stashed changes
