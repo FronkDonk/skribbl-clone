@@ -3,20 +3,35 @@
 
 if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     header('Content-Type: application/json');
-    require $_SERVER['DOCUMENT_ROOT'] . '/src/db/supabase.php';
+    require $_SERVER['DOCUMENT_ROOT'] . '/src/db/db.php';
+    $userId = $_SESSION["userId"];
 
-    $auth = $service->createAuth();
-    $accessToken = $_SESSION['access_token'];
+
 
     try {
-        $userData = $auth->getUser($accessToken);
+        $user = $db->prepare("SELECT * FROM users WHERE id = :userId");
+
+        $user->bindValue(':userId', $userId);
+        $user->execute();
+        $userData = $user->fetch();
+
+        if (!$userData) {
+            http_response_code(404);
+            echo json_encode(['message' => 'User not found']);
+            exit;
+        }
+
         http_response_code(200);
         echo json_encode(['message' => 'Success', 'data' => $userData]);
         exit;
-    } catch (Exception $e) {
+    } catch (PDOException $e) {
         http_response_code(500);
-        echo json_encode(['message' => $e->getMessage()]);
+        echo json_encode([
+            'message' => 'Database error: ' . $e->getMessage(),
+            'code' => $e->getCode(),
+            'file' => $e->getFile(),
+            'line' => $e->getLine()
+        ]);
         exit;
     }
-
 }

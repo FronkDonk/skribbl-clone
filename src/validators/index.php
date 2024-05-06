@@ -5,7 +5,7 @@ class Validator
     public function notEmpty()
     {
         return function ($data) {
-            return !empty ($data) ? true : "Data cannot be empty";
+            return !empty($data) ? true : "Data cannot be empty";
         };
     }
 
@@ -62,7 +62,7 @@ class Validator
     public function htmlspecialchars()
     {
         return function ($data) {
-            return htmlspecialchars($data);
+            return htmlspecialchars($data) ? true : "Data is not valid";
         };
     }
     public function validate($fields, $data)
@@ -80,4 +80,3 @@ class Validator
         return $errors;
     }
 }
-

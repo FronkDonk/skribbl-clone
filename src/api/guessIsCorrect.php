@@ -1,8 +1,6 @@
 <?php
 require $path = $_SERVER['DOCUMENT_ROOT'] . '/vendor/autoload.php';
 
-use Respect\Validation\Validator as v;
-
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     require $_SERVER['DOCUMENT_ROOT'] . '/src/validators/index.php';
 

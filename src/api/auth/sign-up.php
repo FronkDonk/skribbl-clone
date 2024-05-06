@@ -27,11 +27,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 exit;
             }
             $hashedPassword = password_hash($_POST["password"], PASSWORD_DEFAULT);
+
             $user = $db->prepare("INSERT INTO users (username, email, password) VALUES (:username, :email, :password)");
+
             $user->bindValue(':username', $_POST["username"]);
             $user->bindValue(':email', $_POST["email"]);
             $user->bindValue(':password', $hashedPassword);
             $user->execute();
+
             http_response_code(200);
             echo json_encode(['message' => 'Success']);
             exit;
@@ -50,7 +53,4 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         echo json_encode(['message' => 'FEsk', 'errors' => $errors]);
         exit;
     }
-
-
 }
-

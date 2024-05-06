@@ -11,7 +11,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         'email' => [$validator->notEmpty(), $validator->email(), $validator->htmlspecialchars()],
         'password' => [$validator->notEmpty(), $validator->htmlspecialchars()],
     ], $_POST);
-    $errors = null;
+
     header('Content-Type: application/json');
 
     if (empty($errors)) {
