@@ -1,12 +1,7 @@
 <?php
 session_start();
 
-$uri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
 
-// If the requested URI corresponds to a file in the file system, serve the file directly
-if (is_file(__DIR__ . $uri)) {
-    return false;
-}
 
 require $_SERVER['DOCUMENT_ROOT'] . '/vendor/autoload.php';
 $dispatcher = FastRoute\simpleDispatcher(function (FastRoute\RouteCollector $r) {
