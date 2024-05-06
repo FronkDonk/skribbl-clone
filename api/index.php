@@ -140,7 +140,7 @@ switch ($routeInfo[0]) {
                 break;
             }
             $callbackUrl = $uri;
-            if ($_SERVER['QUERY_STRING']) {
+            if (isset($_SERVER['QUERY_STRING'])) {
                 $callbackUrl .= '?' . $_SERVER['QUERY_STRING'];
             }
 
