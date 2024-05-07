@@ -11,7 +11,7 @@ $dispatcher = FastRoute\simpleDispatcher(function (FastRoute\RouteCollector $r) 
     $r->addRoute('GET', '/game', function () {
         $uuid = \Ramsey\Uuid\Uuid::uuid4();
         header("Location: /new-game/{$uuid->toString()}");
-        exit ();
+        exit();
     });
     $r->addRoute("POST", "/api/clearPrevDrawers", function () {
         require $_SERVER['DOCUMENT_ROOT'] . "/src/api/clearPrevDrawers.php";
@@ -57,7 +57,7 @@ $dispatcher = FastRoute\simpleDispatcher(function (FastRoute\RouteCollector $r) 
         $uuid = \Ramsey\Uuid\Uuid::uuid4();
 
         header("Location: /new-game/{$uuid->toString()}");
-        exit ();
+        exit();
     });
     $r->addRoute("GET", "/src/actions/getUserData", function () {
         require $_SERVER['DOCUMENT_ROOT'] . "/src/js/actions/getUserData.js";
@@ -83,7 +83,6 @@ $dispatcher = FastRoute\simpleDispatcher(function (FastRoute\RouteCollector $r) 
     $r->addRoute("POST", "/api/auth/sign-up", function () {
         require $_SERVER['DOCUMENT_ROOT'] . "/src/api/auth/sign-up.php";
     });
-
 });
 
 // Fetch method and URI from somewhere
@@ -162,5 +161,4 @@ switch ($routeInfo[0]) {
 
         $handler($vars);
         break;
-
 }

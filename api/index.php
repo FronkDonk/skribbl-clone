@@ -1,3 +1,3 @@
 <?php
 
-require __DIR__ . '/../index.php';
+require $_SERVER['DOCUMENT_ROOT'] . "/index.php";
