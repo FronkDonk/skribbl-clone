@@ -2,11 +2,82 @@
 session_start();
 
 
-
 require $_SERVER['DOCUMENT_ROOT'] . '/vendor/autoload.php';
 $dispatcher = FastRoute\simpleDispatcher(function (FastRoute\RouteCollector $r) {
-    $r->addRoute('GET', '/', function () {
-        require $_SERVER['DOCUMENT_ROOT'] . "/index.php";
+    $r->addRoute('GET', '/game', function () {
+        $uuid = \Ramsey\Uuid\Uuid::uuid4();
+        header("Location: /new-game/{$uuid->toString()}");
+        exit();
+    });
+    $r->addRoute("POST", "/api/clearPrevDrawers", function () {
+        require $_SERVER['DOCUMENT_ROOT'] . "/src/api/clearPrevDrawers.php";
+    });
+    $r->addRoute("GET", "/api/chooseWord", function () {
+        require $_SERVER['DOCUMENT_ROOT'] . "/src/api/chooseWord.php";
+    });
+    $r->addRoute("POST", "/api/saveWord", function () {
+        require $_SERVER['DOCUMENT_ROOT'] . "/src/api/saveWord.php";
+    });
+    $r->addRoute("POST", "/api/renderMessage", function () {
+        require $_SERVER['DOCUMENT_ROOT'] . "/src/api/renderMessage.php";
+    });
+    $r->addRoute("POST", "/api/renderChatMessages", function () {
+        require $_SERVER['DOCUMENT_ROOT'] . "/src/api/renderChatMessages.php";
+    });
+    $r->addRoute("POST", "/api/guessIsCorrect", function () {
+        require $_SERVER['DOCUMENT_ROOT'] . "/src/api/guessIsCorrect.php";
+    });
+    $r->addRoute("POST", "/api/saveChatMessage", function () {
+        require $_SERVER['DOCUMENT_ROOT'] . "/src/api/saveChatMessage.php";
+    });
+    $r->addRoute("POST", "/api/addPlayerToGame", function () {
+        require $_SERVER['DOCUMENT_ROOT'] . "/src/api/addPlayerToGame.php";
+    });
+    $r->addRoute("POST", "/api/addPrevDrawers", function () {
+        require $_SERVER['DOCUMENT_ROOT'] . "/src/api/addPrevDrawers.php";
+    });
+    $r->addRoute('GET', '/game/{id}', function ($id) {
+        require $_SERVER['DOCUMENT_ROOT'] . "/src/views/game.php";
+    });
+    $r->addRoute('GET', '/new-game/{id}', function ($id) {
+        require $_SERVER['DOCUMENT_ROOT'] . "/src/views/new-game2.php";
+    });
+    $r->addRoute('POST', '/new-game/{id}', function ($id) {
+        require $_SERVER['DOCUMENT_ROOT'] . "/src/api/new-game.php";
+    });
+
+    $r->addRoute('POST', '/api/renderOnlineUsers', function () {
+        require $_SERVER['DOCUMENT_ROOT'] . "/src/api/renderOnlineUsers.php";
+    });
+    $r->addRoute('GET', '/new-game', function () {
+        $uuid = \Ramsey\Uuid\Uuid::uuid4();
+
+        header("Location: /new-game/{$uuid->toString()}");
+        exit();
+    });
+    $r->addRoute("GET", "/src/actions/getUserData", function () {
+        require $_SERVER['DOCUMENT_ROOT'] . "/src/js/actions/getUserData.js";
+    });
+    $r->addRoute('POST', '/api/new-game', function () {
+        require $_SERVER['DOCUMENT_ROOT'] . "/src/api/new-game.php";
+    });
+    $r->addRoute("GET", "/lobby/{id}", function ($id) {
+        require $_SERVER['DOCUMENT_ROOT'] . "/src/views/lobby.php";
+    });
+    $r->addRoute("GET", "/api/getCurrentUser", function () {
+        require $_SERVER['DOCUMENT_ROOT'] . "/src/api/getCurrentUser.php";
+    });
+    $r->addRoute("GET", "/auth/sign-in", function () {
+        require $_SERVER['DOCUMENT_ROOT'] . "/src/views/auth/sign-in.php";
+    });
+    $r->addRoute("POST", "/api/auth/sign-in", function () {
+        require $_SERVER['DOCUMENT_ROOT'] . "/src/api/auth/sign-in.php";
+    });
+    $r->addRoute("GET", "/auth/sign-up", function () {
+        require $_SERVER['DOCUMENT_ROOT'] . "/src/views/auth/sign-up.php";
+    });
+    $r->addRoute("POST", "/api/auth/sign-up", function () {
+        require $_SERVER['DOCUMENT_ROOT'] . "/src/api/auth/sign-up.php";
     });
 });
 
