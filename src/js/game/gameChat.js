@@ -53,13 +53,10 @@ document
   <div class="p-2 bg-muted rounded-md flex items-center gap-2">
 
   <div class="relative flex flex-col gap-2 h-10 w-10 shrink-0 overflow-hidden rounded-full bg-gradient-to-tr from-[#7FB2FF] to-[#FF7F7F]"></div>
-
       <div class="flex flex-col gap-px ">
           <label class="text-base">${username}</label>
-     
-
-      <p class="text-sm ">${message}</p>
-       </div>
+          <p class="text-sm ">${message}</p>
+      </div>
   </div>
   </div>
 `;
@@ -82,6 +79,7 @@ document
       saveChatMessage({ message, userId, username, sentAt, gameId }),
       guessIsCorrect({ message, gameId }),
     ]);
+    /
 
     if (isCorrect) {
       console.log("correct guess");
@@ -100,20 +98,15 @@ gameChat.on("broadcast", { event: "new-message" }, ({ payload }) => {
 
   const chat = document.getElementById("chat");
 
-  const div = `
-  <div class="p-2 bg-muted rounded-md flex items-center gap-2">
-
-  <div class="relative flex flex-col gap-2 h-10 w-10 shrink-0 overflow-hidden rounded-full bg-gradient-to-tr from-[#7FB2FF] to-[#FF7F7F]"></div>
-
-      <div class="flex flex-col gap-px ">
-          <label class="text-base">${username}</label>
-     
-
-      <p class="text-sm ">${message}</p>
-       </div>
-  </div>
-  </div>
-`;
+  const div = 
+  `<div class="p-2 bg-muted rounded-md flex items-center gap-2">
+    <div class="relative flex flex-col gap-2 h-10 w-10 shrink-0 overflow-hidden rounded-full bg-gradient-to-tr from-[#7FB2FF] to-[#FF7F7F]"></div>
+        <div class="flex flex-col gap-px ">
+            <label class="text-base">${username}</label>
+            <p class="text-sm ">${message}</p>
+        </div>
+    </div>
+  </div>`;
 
   chat.insertAdjacentHTML("beforeend", div);
 });
