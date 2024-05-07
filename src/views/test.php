@@ -9,7 +9,7 @@
 </head>
 
 <body>
-    <h1>HEJ</h1>
+    <h1 class="text-3xl text-blue-500">HEJ</h1>
 </body>
 
 </html>
