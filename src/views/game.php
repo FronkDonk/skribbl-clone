@@ -18,7 +18,7 @@
     $blade = new Blade($_SERVER['DOCUMENT_ROOT'] . '/src/components/ui', $_SERVER['DOCUMENT_ROOT'] . '/src/components/ui/cache');
 
     ?>
-    <main class="min-h-screen p-6">
+    < class="min-h-screen p-6">
         <section id="section" class="w-full flex flex-col gap-3 ">
             <div id="scoreboard" class="flex flex-wrap gap-2">
             </div>
@@ -62,10 +62,18 @@
 
             </div>
         </section>
+        <section class="" id="gameFinished">
+            <div class="flex flex-col gap-2 items-center">
+                <h1 class="text-3xl font-bold">Game Over</h1>
+                <p class="text-lg">The word was <span id="word"></span></p>
+                <p class="text-lg">The winner is <span id="winner"></span></p>
+                <button id="playAgain" class="bg-primary text-white p-2 rounded-lg">Play Again</button>
+            </div>
+        </section>
 
 
-    </main>
-    <script src="/dist/game.bundle.js"></script>
+        </main>
+        <script src="/dist/game.bundle.js"></script>
 </body>
 
 </html>

@@ -11,6 +11,9 @@ $dispatcher = FastRoute\simpleDispatcher(function (FastRoute\RouteCollector $r) 
     $r->addRoute('GET', '/create-game', function () {
         require $_SERVER['DOCUMENT_ROOT'] . "/src/views/create-game.php";
     });
+    $r->addRoute('GET', '/profile', function () {
+        require $_SERVER['DOCUMENT_ROOT'] . "/src/views/profile.php";
+    });
     /*    $r->addRoute('GET', '/game', function () {
            header("Location: /");
            exit ();
@@ -28,6 +31,7 @@ $dispatcher = FastRoute\simpleDispatcher(function (FastRoute\RouteCollector $r) 
     $r->addRoute("GET", "/lobby/{id}", function ($id) {
         require $_SERVER['DOCUMENT_ROOT'] . "/src/views/lobby.php";
     });
+
 
     //auth
     $r->addRoute("GET", "/auth/sign-up", function () {
@@ -48,8 +52,14 @@ $dispatcher = FastRoute\simpleDispatcher(function (FastRoute\RouteCollector $r) 
     $r->addRoute('POST', '/api/create-game', function () {
         require $_SERVER['DOCUMENT_ROOT'] . "/src/api/create-game.php";
     });
+    $r->addRoute('POST', '/api/updateProfile', function () {
+        require $_SERVER['DOCUMENT_ROOT'] . "/src/api/updateProfile.php";
+    });
     $r->addRoute('POST', '/api/join-game', function () {
         require $_SERVER['DOCUMENT_ROOT'] . "/src/api/join-game.php";
+    });
+    $r->addRoute('GET', '/api/getProfileData', function () {
+        require $_SERVER['DOCUMENT_ROOT'] . "/src/api/getProfileData.php";
     });
     $r->addRoute('POST', '/api/new-game', function () {
         require $_SERVER['DOCUMENT_ROOT'] . "/src/api/new-game.php";
@@ -65,6 +75,9 @@ $dispatcher = FastRoute\simpleDispatcher(function (FastRoute\RouteCollector $r) 
     });
     $r->addRoute("GET", "/api/chooseWord", function () {
         require $_SERVER['DOCUMENT_ROOT'] . "/src/api/chooseWord.php";
+    });
+    $r->addRoute("POST", "/api/changePassword", function () {
+        require $_SERVER['DOCUMENT_ROOT'] . "/src/api/changePassword.php";
     });
     $r->addRoute("POST", "/api/saveWord", function () {
         require $_SERVER['DOCUMENT_ROOT'] . "/src/api/saveWord.php";

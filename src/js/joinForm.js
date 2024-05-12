@@ -19,6 +19,7 @@ document
     const result = schema.safeParse(userData);
 
     if (!result.success) {
+      alert("Invalid data");
       console.error(result.error);
       return;
     }
@@ -29,6 +30,7 @@ document
     });
 
     if (!res.ok) {
+      alert("Failed to join game");
       console.error("Failed to join game");
       return;
     }

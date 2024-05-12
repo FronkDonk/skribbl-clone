@@ -9,6 +9,7 @@ module.exports = {
     signIn: "./dist/signInScripts.js",
     createGame: "./dist/createGameScripts.js",
     joinGame: "./dist/joinGameScripts.js",
+    profile: "./dist/profileScripts.js",
   },
   mode: "development",
   output: {

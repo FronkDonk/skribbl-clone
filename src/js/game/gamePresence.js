@@ -20,6 +20,7 @@ export let prevDrawers = [];
 export let clientPlayer;
 export let timer;
 export let roundFinsihedEarly = false;
+export let roundState = "not-started";
 
 export function setRoundFinsihedEarly() {
   roundFinsihedEarly = false;
@@ -114,7 +115,9 @@ function startGame(players) {
 }
 
 async function startNewRound(prevDrawers) {
+  roundState = "not-started";
   if (userStatus.isOwner) {
+    clearTimeout(timer);
     if (players.length >= 2) {
       const player = players.find((player) => !prevDrawers.includes(player.id));
       if (!player) {
@@ -151,9 +154,12 @@ async function startNewRound(prevDrawers) {
 }
 
 function startDrawingTime(player) {
+  roundState = "in-progress";
   if (userStatus.isOwner) {
     timer = setTimeout(async () => {
-      timesUp();
+      if (roundState === "in-progress") {
+        timesUp();
+      }
     }, userStatus.drawingTime * 1000);
   }
 }
@@ -197,16 +203,14 @@ gameRoom.on("broadcast", { event: "new-round" }, async ({ payload }) => {
   input.disabled = false;
   console.log("new-round", payload);
   const player = payload.player;
-  countdown(userStatus.drawingTime);
   updateEventListeners();
   startDrawingTime(player);
+  countdown(userStatus.drawingTime);
 });
 
 gameRoom.on("broadcast", { event: "times-up" }, ({ payload }) => {
   const drawDiv = document.getElementById("draw");
   drawDiv.innerHTML = "";
-  const counter = document.getElementById("counter");
-  counter.innerHTML = "";
   correctGuesses = [];
   console.log("times-up", payload);
   prevDrawers = payload.previousDrawers;
@@ -219,7 +223,21 @@ gameRoom.on("broadcast", { event: "times-up" }, ({ payload }) => {
   startNewRound(prevDrawers);
 });
 
-gameRoom.on("broadcast", { event: "finished" }, ({ payload }) => {});
+gameRoom.on("broadcast", { event: "finished" }, ({ payload }) => {
+  if (userStatus.isOwner) {
+  }
+  const finishedDiv = document.getElementById("gameFinished");
+
+  finishedDiv.style.display = "block";
+
+  const sortedPlayers = players.sort((a, b) => b.score - a.score);
+
+  const winner = sortedPlayers[0].username;
+
+  const div = `
+  
+  `;
+});
 
 function handleWordClick(e, player, drawerId) {
   const word = e.target.textContent;
@@ -240,8 +258,9 @@ function handleWordClick(e, player, drawerId) {
 }
 
 export async function timesUp() {
-  if (!roundFinsihedEarly) {
-    roundFinsihedEarly = true;
+  console.log("times up");
+  if (roundState === "in-progress") {
+    roundState = "finished";
     correctGuesses = [];
     console.log("times up");
     let player = players.find((player) => player.isDrawing === true);

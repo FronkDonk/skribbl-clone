@@ -17,6 +17,7 @@ document
     const result = schema.safeParse(userData);
 
     if (!result.success) {
+      alert("Invalid data");
       console.error(result.error);
       return;
     }
@@ -27,6 +28,7 @@ document
     });
 
     if (!res.ok) {
+      alert("Failed to create game");
       console.error("Failed to create game");
       return;
     }
