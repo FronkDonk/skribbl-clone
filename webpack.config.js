@@ -3,11 +3,12 @@ const path = require("path");
 
 module.exports = {
   entry: {
-    main: "./dist/sharedScripts.js",
     lobby: "./dist/lobbyScripts.js",
     game: "./dist/gameScripts.js",
     signUp: "./dist/signUpScripts.js",
     signIn: "./dist/signInScripts.js",
+    createGame: "./dist/createGameScripts.js",
+    joinGame: "./dist/joinGameScripts.js",
   },
   mode: "development",
   output: {

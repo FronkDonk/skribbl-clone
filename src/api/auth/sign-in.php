@@ -36,6 +36,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 
             $_SESSION['userId'] = $data["id"];
+            $_SESSION['email'] = $data["email"];
+            $_SESSION['username'] = $data["username"];
 
             http_response_code(200);
             echo json_encode(['message' => 'Success']);

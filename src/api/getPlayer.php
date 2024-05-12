@@ -4,14 +4,13 @@
 if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     header('Content-Type: application/json');
     require $_SERVER['DOCUMENT_ROOT'] . '/src/db/db.php';
-    $userId = $_SESSION["userId"];
+    $playerId = $_SESSION["playerId"];
 
 
 
     try {
-        $user = $db->prepare("SELECT * FROM users WHERE id = :userId");
-
-        $user->bindValue(':userId', $userId);
+        $user = $db->prepare("SELECT * FROM room_players WHERE id = :playerId");
+        $user->bindValue(':playerId', $playerId);
         $user->execute();
         $userData = $user->fetch();
 
@@ -20,7 +19,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
             echo json_encode(['message' => 'User not found']);
             exit;
         }
-
         http_response_code(200);
         echo json_encode(['message' => 'Success', 'data' => $userData]);
         exit;

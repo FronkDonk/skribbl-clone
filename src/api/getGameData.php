@@ -6,8 +6,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     $validator = new Validator();
 
-    $error = $validator->validate([
-        "word" => [$validator->notEmpty(), $validator->stringType()],
+    $errors = $validator->validate([
         'gameId' => [$validator->notEmpty(), $validator->htmlspecialchars(), $validator->stringType(), $validator->minLength(6), $validator->maxLength(6)],
     ], $_POST);
 
@@ -16,23 +15,25 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         echo json_encode(["errors" => $errors]);
         exit;
     }
-    require $_SERVER['DOCUMENT_ROOT'] . "/src/db/redis.php";
+
+    require $_SERVER['DOCUMENT_ROOT'] . "/src/db/db.php";
     try {
-        $client->set("game:{$_POST['gameId']}:word", $_POST["word"]);
+        $query = $db->prepare("SELECT * FROM game_room WHERE id = :gameId");
+        $query->bindValue(':gameId', $_POST["gameId"]);
+        $query->execute();
+        $existingGame = $query->fetch();
+
         http_response_code(200);
-        echo json_encode(['message' => 'Success']);
+        echo json_encode(["gameData" => $existingGame]);
         exit;
-    } catch (Exception $e) {
+    } catch (PDOException $e) {
         http_response_code(500);
-        echo json_encode(['message' => $e->getMessage()]);
+        echo json_encode([
+            'message' => 'Database error: ' . $e->getMessage(),
+            'code' => $e->getCode(),
+            'file' => $e->getFile(),
+            'line' => $e->getLine()
+        ]);
         exit;
     }
 }
-
-
-
-
-
-
-
-

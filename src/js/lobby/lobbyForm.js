@@ -1,13 +1,14 @@
 import * as z from "zod";
 import { players } from "./lobbyPresence.js";
 import { id as userId } from "./lobby.js";
+import { gameRoom } from "./lobby.js";
 
 const schema = z.object({
   maxPlayers: z.enum(["2", "4", "6", "8"]),
   numRounds: z.enum(["3", "6", "8"]),
   drawingTime: z.enum(["20", "40", "60", "80"]),
   visibility: z.enum(["Public", "Private"]),
-  gameId: z.string().uuid(),
+  gameId: z.string().length(6),
   ownerId: z.string().uuid(),
   players: z
     .array(
@@ -31,10 +32,10 @@ const schema = z.object({
 
 const id = window.location.pathname.split("/")[2];
 document
-  .getElementById("myForm")
+  .getElementById("new-game-form")
   .addEventListener("submit", async function (event) {
     event.preventDefault(); // Prevent the form from being submitted normally
-
+    console.log("form submitted");
     const formData = new FormData(this); // Create a FormData object from the form
     formData.append("ownerId", userId);
     formData.append("gameId", id);
@@ -63,10 +64,13 @@ document
       const data = await res.json();
       console.error(data);
     } else {
-      const data = await res.json();
-      console.log(data);
-      // Log the response body to the console
-      /* console.log(data[0].id);
-      window.location.href = `/lobby/${data[0].id}`; */
+      window.location.href = `/game/${result.data.gameId}`;
+      gameRoom.send({
+        type: "broadcast",
+        event: "startGame",
+        payload: {
+          gameId: result.data.gameId,
+        },
+      });
     }
   });

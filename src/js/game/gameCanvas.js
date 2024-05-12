@@ -1,5 +1,5 @@
-import { players } from "./gamePresence";
 import { client } from "../supabaseClient";
+import { players } from "./gamePresence";
 
 const path = window.location.pathname;
 

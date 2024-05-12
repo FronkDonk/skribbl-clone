@@ -18,13 +18,21 @@
     $blade = new Blade($_SERVER['DOCUMENT_ROOT'] . '/src/components/ui', $_SERVER['DOCUMENT_ROOT'] . '/src/components/ui/cache');
 
     ?>
-    <main class="min-h-screen p-6  flex justify-center">
-
-        <section id="section" class="w-full flex flex-col items-center">
+    <main class="min-h-screen p-6">
+        <section id="section" class="w-full flex flex-col gap-3 ">
+            <div id="scoreboard" class="flex flex-wrap gap-2">
+            </div>
             <div class="flex w-full gap-5">
                 <div class="w-[80%]">
-                    <div class="bg-muted rounded-lg">
+                    <div class="bg-muted rounded-lg relative w-full p-2 ">
                         <canvas id="gameCanvas" class="aspect-video w-full"></canvas>
+                        <div id="draw" class="p-2 flex gap-2 items-center">
+
+                        </div>
+                        <div id="counter" class="text-3xl font-medium absolute right-0 top-0 p-2 ">
+
+                        </div>
+
                     </div>
                 </div>
                 <div class="max-h-full">

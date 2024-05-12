@@ -12,10 +12,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         "message" => [$validator->notEmpty(), $validator->stringType()],
         "userId" => [$validator->notEmpty(), $validator->uuid()],
         "sentAt" => [$validator->notEmpty(), $validator->stringType()],
-        "gameId" => [$validator->notEmpty(), $validator->uuid()],
+        'gameId' => [$validator->notEmpty(), $validator->htmlspecialchars(), $validator->stringType(), $validator->minLength(6), $validator->maxLength(6)],
     ], $_POST);
-
-    $errors = null;
 
     if (!empty($errors)) {
         http_response_code(400);
@@ -23,14 +21,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         exit;
     }
     require $_SERVER['DOCUMENT_ROOT'] . "/src/db/db.php";
-    /*   $newMessage = [
-          "message" => $_POST["message"],
-          "user_id" => $_POST["userId"],
-          "sent_at" => $_POST["sentAt"],
-          "room_id" => $_POST["gameId"],
-      ]; */
-
-
     try {
         $query = $db->prepare("INSERT INTO room_messages (message, user_id, sent_at, room_id) VALUES (:message, :userId, :sentAt, :gameId)");
 

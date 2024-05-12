@@ -11,7 +11,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 
     $errors = $validator->validate([
-        "gameId" => [$validator->notEmpty(), $validator->uuid()],
+        'gameId' => [$validator->notEmpty(), $validator->htmlspecialchars(), $validator->stringType(), $validator->minLength(6), $validator->maxLength(6)],
         "drawerId" => [$validator->notEmpty(), $validator->uuid()],
     ], $_POST);
 

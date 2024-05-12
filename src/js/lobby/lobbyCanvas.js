@@ -1,4 +1,6 @@
-import { client } from "./supabaseClient.js";
+//not using this anymore
+
+import { client } from "../supabaseClient.js";
 import { gameId } from "./lobby.js";
 const lobbyCanvas = client.channel(`lobbyCanvas-${gameId}`, {
   config: {

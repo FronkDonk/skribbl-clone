@@ -1,5 +1,11 @@
-import { getUserData } from "./actions/getUserData.js";
-import { client } from "./supabaseClient.js";
+//if user is owner send req to save game id in redis
+
+import { getPlayer } from "../actions/getPlayer.js";
+import { client } from "../supabaseClient.js";
+
+export const newGameForm = document.getElementById("new-game-form");
+newGameForm.style.pointerEvents = "none";
+newGameForm.style.opacity = 0.5;
 
 const path = window.location.pathname;
 
@@ -7,25 +13,26 @@ const segments = path.split("/");
 document.getElementById("startGame").disabled = true;
 
 export const gameId = segments[2];
-export const id = await getUserData();
-console.log({ id });
-if (!id) {
+
+const data = await getPlayer();
+if (!data) {
   console.log("ERror maybe display toast or something");
 }
+
+export const id = data.id;
 
 export const gameRoom = client.channel(`game-${gameId}`, {
   config: {
     broadcast: { self: true },
     presence: {
-      key: `${id}`,
+      key: `${data.id}`,
     },
   },
 });
-const usernames = ["John Doe", "The Real Slim Shady", "The Fake Slim Shady"];
 
 const userStatus = {
-  username: usernames[Math.floor(Math.random() * usernames.length)],
-  user: `${id}`,
+  username: data.username,
+  user: data.id,
   online_at: new Date().getTime(),
 };
 
@@ -33,5 +40,5 @@ gameRoom.subscribe(async (status) => {
   if (status !== "SUBSCRIBED") {
     return;
   }
-  const presenceTrackStatus = await gameRoom.track(userStatus);
+  await gameRoom.track(userStatus);
 });

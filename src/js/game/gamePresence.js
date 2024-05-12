@@ -1,68 +1,60 @@
-import { createClient } from "@supabase/supabase-js";
-import { addPlayerToGame } from "../actions/addPlayerToGame.js";
 import { addPrevDrawers } from "../actions/addPrevDrawers.js";
 import { clearPrevDrawers } from "../actions/clearPrevDrawers.js";
 import { updateEventListeners } from "./gameCanvas.js";
 import { client } from "../supabaseClient.js";
 import { chooseWord } from "../actions/chooseWord.js";
 import { saveWord } from "../actions/saveWord.js";
-
+import { getPlayer } from "../actions/getPlayer.js";
+import { getGameData } from "../actions/getGameData.js";
+import { countdown, drawingUI, renderScoreboard } from "./gameUi.js";
 const path = window.location.pathname;
+export const scoreboard = document.getElementById("scoreboard");
 
 const segments = path.split("/");
 const gameId = segments[2];
 let currentDrawerIndex = 0;
 let gameIsFinished = false;
-export let players = [
-  /* {
-    id: "2daab645-0098-465a-90c3-00d60e8641e2",
-    username: "Alice",
-    isDrawing: false,
-    score: 0,
-    isOwner: false,
-  },
-  {
-    id: "2daab645-0098-465a-90c3-00d60e8641e3",
-    username: "Bob",
-    isDrawing: false,
-    score: 0,
-    isOwner: false,
-  },
-  {
-    id: "2daab645-0098-465a-90c3-00d60e8641e6",
-    username: "Charlie",
-    isDrawing: false,
-    score: 0,
-    isOwner: false,
-  }, */
-];
+export let correctGuesses = [];
+export let players = [];
 export let prevDrawers = [];
-export const { player, gameData } = await addPlayerToGame(gameId);
+export let clientPlayer;
+export let timer;
+export let roundFinsihedEarly = false;
+
+export function setRoundFinsihedEarly() {
+  roundFinsihedEarly = false;
+}
+
+const [player, gameData] = await Promise.all([
+  getPlayer(),
+  getGameData({ gameId }),
+]);
+
 export const gameRoom = client.channel(`game-${gameId}`, {
   config: {
     broadcast: {
       self: true,
     },
     presence: {
-      key: player[0].id,
+      key: player.id,
     },
   },
 });
 
-const userStatus = {
-  id: player[0].id,
-  username: player[0].username,
-  isOwner: player[0].isOwner,
-  score: player[0].score,
-  rounds: +gameData[0].num_rounds,
-  drawingTime: +gameData[0].drawing_time,
+export const userStatus = {
+  id: player.id,
+  username: player.username,
+  isOwner: player.is_owner,
+  score: player.score,
+  rounds: +gameData.num_rounds,
+  drawingTime: +gameData.drawing_time,
 };
 
 gameRoom.subscribe(async (status) => {
   if (status !== "SUBSCRIBED") {
     return;
   }
-  const presenceTrackStatus = await gameRoom.track(userStatus);
+  await gameRoom.track(userStatus);
 });
 
 gameRoom
@@ -70,13 +62,12 @@ gameRoom
     const newState = gameRoom.presenceState();
     console.log("sync", newState);
 
-    Object.entries(newState).forEach(([key, value], i) => {
+    for (const [key, value] of Object.entries(newState)) {
       const userExists = players.some((player) => player.id === value[0].id);
 
       if (!userExists) {
         players.push({
           id: value[0].id,
-          index: i,
           username: value[0].username,
           isDrawing: false,
           score: value[0].score,
@@ -84,12 +75,15 @@ gameRoom
           isClient: value[0].id === userStatus.id,
         });
         console.log(players);
+        clientPlayer = players.find((player) => player.isClient === true);
       }
+
+      renderScoreboard(players);
       updateEventListeners();
       if (!gameIsFinished && userStatus.isOwner && players.length >= 2) {
         startGame(players);
       }
-    });
+    }
   })
   .on("presence", { event: "join" }, ({ key, newPresences }) => {
     console.log("join", key, newPresences);
@@ -104,16 +98,18 @@ gameRoom
 
 function startGame(players) {
   if (userStatus.isOwner && players.length >= 2) {
-    gameRoom.send({
-      type: "broadcast",
-      event: "choose-word",
-      payload: {
-        drawerId: players[currentDrawerIndex].id,
-      },
-    });
-    currentDrawerIndex = (currentDrawerIndex + 1) % players.length;
-  } else {
-    console.log("not enough players");
+    if (currentDrawerIndex < players.length) {
+      gameRoom.send({
+        type: "broadcast",
+        event: "choose-word",
+        payload: {
+          drawerId: players[currentDrawerIndex].id,
+        },
+      });
+      currentDrawerIndex = (currentDrawerIndex + 1) % players.length;
+    } else {
+      console.log("not enough players");
+    }
   }
 }
 
@@ -123,22 +119,30 @@ async function startNewRound(prevDrawers) {
       const player = players.find((player) => !prevDrawers.includes(player.id));
       if (!player) {
         prevDrawers = [];
-        const data = await clearPrevDrawers(gameId, userStatus.rounds);
-        if (data.end) {
-          console.log("all rounds have been played");
-          gameIsFinished = true;
+        try {
+          const data = await clearPrevDrawers(gameId, userStatus.rounds);
+          if (data.end) {
+            console.log("all rounds have been played");
+            gameIsFinished = true;
+            gameRoom.send({
+              type: "broadcast",
+              event: "finished",
+            });
+            return;
+          }
+        } catch (error) {
+          console.error("Error clearing previous drawers:", error);
           return;
         }
-      } else {
-        gameRoom.send({
-          type: "broadcast",
-          event: "choose-word",
-          payload: {
-            drawerId: players[currentDrawerIndex].id,
-          },
-        });
-        currentDrawerIndex = (currentDrawerIndex + 1) % players.length;
       }
+      gameRoom.send({
+        type: "broadcast",
+        event: "choose-word",
+        payload: {
+          drawerId: players[currentDrawerIndex].id,
+        },
+      });
+      currentDrawerIndex = (currentDrawerIndex + 1) % players.length;
     } else {
       console.log("game over");
       //check who has the most score
@@ -148,16 +152,8 @@ async function startNewRound(prevDrawers) {
 
 function startDrawingTime(player) {
   if (userStatus.isOwner) {
-    setTimeout(async () => {
-      const prevDrawers = await addPrevDrawers(gameId, player.id);
-      gameRoom.send({
-        type: "broadcast",
-        event: "times-up",
-        payload: {
-          drawerId: player.id,
-          previousDrawers: prevDrawers,
-        },
-      });
+    timer = setTimeout(async () => {
+      timesUp();
     }, userStatus.drawingTime * 1000);
   }
 }
@@ -165,62 +161,56 @@ console.log({ drawingTime: userStatus.drawingTime });
 
 gameRoom.on("broadcast", { event: "choose-word" }, async ({ payload }) => {
   console.log("choose-word", payload);
+  const wordSelection = document.getElementById("wordSelection");
+  wordSelection.innerHTML = "";
   const drawerId = payload.drawerId;
+
+  players.forEach((player) => {
+    player.isDrawing = false;
+  });
+
   let player = players.find((player) => player.id === drawerId);
   player.isDrawing = true;
-  const words = await chooseWord();
-  if (words) {
-    console.log(words);
-    const wordSelection = document.getElementById("wordSelection");
-    for (const word of words) {
-      // Create a new button element
-      const button = document.createElement("button");
 
-      // Add classes
-      button.classList.add(
-        "inline-flex",
-        "items-center",
-        "justify-center",
-        "whitespace-nowrap",
-        "rounded-md",
-        "text-sm",
-        "font-medium",
-        "ring-offset-background",
-        "transition-colors",
-        "focus-visible:outline-none",
-        "focus-visible:ring-2",
-        "focus-visible:ring-ring",
-        "focus-visible:ring-offset-2",
-        "disabled:pointer-events-none",
-        "disabled:opacity-50",
-        "border",
-        "border-input",
-        "bg-background",
-        "hover:bg-accent",
-        "hover:text-accent-foreground",
-        "h-10",
-        "px-4",
-        "py-2"
-      );
-      button.textContent = word;
-      button.onclick = (e) => handleWordClick(e, player, drawerId);
-      wordSelection.appendChild(button);
+  if (clientPlayer && clientPlayer.id === drawerId && player.isDrawing) {
+    const words = await chooseWord();
+    if (words) {
+      wordSelection.innerHTML = "";
+      for (const word of words) {
+        const button = document.createElement("button");
+        button.className =
+          "h-10 px-4 py-2 inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-background hover:bg-accent hover:text-accent-foreground";
+        button.textContent = word;
+
+        // Add the onclick event to the button
+        button.onclick = (e) => handleWordClick(e, player, drawerId);
+
+        // Append the button to the wordSelection
+        wordSelection.appendChild(button);
+      }
     }
   }
 });
 
 gameRoom.on("broadcast", { event: "new-round" }, async ({ payload }) => {
+  const input = document.getElementById("message");
+  input.disabled = false;
   console.log("new-round", payload);
   const player = payload.player;
-
+  countdown(userStatus.drawingTime);
   updateEventListeners();
   startDrawingTime(player);
 });
 
 gameRoom.on("broadcast", { event: "times-up" }, ({ payload }) => {
+  const drawDiv = document.getElementById("draw");
+  drawDiv.innerHTML = "";
+  const counter = document.getElementById("counter");
+  counter.innerHTML = "";
+  correctGuesses = [];
   console.log("times-up", payload);
-  const drawerId = payload.drawerId;
   prevDrawers = payload.previousDrawers;
+  const drawerId = payload.drawerId;
   let player = players.find((player) => player.id === drawerId);
   if (player) {
     player.isDrawing = false;
@@ -229,14 +219,11 @@ gameRoom.on("broadcast", { event: "times-up" }, ({ payload }) => {
   startNewRound(prevDrawers);
 });
 
+gameRoom.on("broadcast", { event: "finished" }, ({ payload }) => {});
+
 function handleWordClick(e, player, drawerId) {
   const word = e.target.textContent;
-  //clear wordSelection div
-
-  const wordSelection = document.getElementById("wordSelection");
-  while (wordSelection.firstChild) {
-    wordSelection.removeChild(wordSelection.firstChild);
-  }
+  drawingUI({ word, drawingTime: userStatus.drawingTime });
   saveWord({ word, gameId });
   gameRoom.send({
     type: "broadcast",
@@ -246,4 +233,26 @@ function handleWordClick(e, player, drawerId) {
       player: player,
     },
   });
+
+  const wordSelection = document.getElementById("wordSelection");
+
+  wordSelection.innerHTML = "";
+}
+
+export async function timesUp() {
+  if (!roundFinsihedEarly) {
+    roundFinsihedEarly = true;
+    correctGuesses = [];
+    console.log("times up");
+    let player = players.find((player) => player.isDrawing === true);
+    const prevDrawers = await addPrevDrawers(gameId, player.id);
+    gameRoom.send({
+      type: "broadcast",
+      event: "times-up",
+      payload: {
+        previousDrawers: prevDrawers,
+        drawerId: player.id,
+      },
+    });
+  }
 }

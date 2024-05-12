@@ -8,7 +8,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     $errors = $validator->validate([
         "message" => [$validator->notEmpty(), $validator->stringType()],
-        "gameId" => [$validator->notEmpty(), $validator->uuid()],
+        'gameId' => [$validator->notEmpty(), $validator->htmlspecialchars(), $validator->stringType(), $validator->minLength(6), $validator->maxLength(6)],
     ], $_POST);
 
     if (!empty($errors)) {
@@ -17,9 +17,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         exit;
     }
     require $_SERVER['DOCUMENT_ROOT'] . "/src/db/redis.php";
+    require $_SERVER['DOCUMENT_ROOT'] . "/src/db/db.php";
+
     try {
+
         $word = $client->get("game:{$_POST['gameId']}:word");
-        if (strtolower($word) == strtolower($_POST["message"])) {
+        $word = trim($word);
+        $message = trim($_POST["message"]);
+        if (strtolower($word) == strtolower($message)) {
+            $query = $db->prepare("UPDATE room_players SET score = score + 100 WHERE game_room_id = :gameId AND id = :playerId");
+            $query->bindValue(":gameId", $_POST['gameId']);
+            $query->bindValue(":playerId", $_SESSION['playerId']);
+            $query->execute();
+
             http_response_code(200);
             echo json_encode(["isCorrect" => true]);
             exit;

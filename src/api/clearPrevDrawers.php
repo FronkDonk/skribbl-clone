@@ -9,8 +9,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $validator = new Validator();
 
     $errors = $validator->validate([
-        "gameId" => [$validator->notEmpty(), $validator->uuid()],
-        "rounds" => [$validator->notEmpty(), $validator->intVal()],
+        'gameId' => [$validator->notEmpty(), $validator->htmlspecialchars(), $validator->stringType(), $validator->minLength(6), $validator->maxLength(6)],
+        "rounds" => [$validator->notEmpty(), $validator->stringType()],
     ], $_POST);
 
     if (!empty($errors)) {
@@ -23,7 +23,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         require $_SERVER['DOCUMENT_ROOT'] . "/src/db/redis.php";
         $client->del("prevDrawers:{$_POST["gameId"]}");
         $currentRounds = $client->get("rounds:{$_POST["gameId"]}");
-        if ($_POST["rounds"] == $currentRounds) {
+        if (intval($_POST["rounds"]) == intval($currentRounds)) {
             //end round
 
             $client->del("rounds:{$_POST["gameId"]}");
