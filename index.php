@@ -45,6 +45,9 @@ $dispatcher = FastRoute\simpleDispatcher(function (FastRoute\RouteCollector $r) 
     $r->addRoute("POST", "/api/auth/sign-in", function () {
         require $_SERVER['DOCUMENT_ROOT'] . "/src/api/auth/sign-in.php";
     });
+    $r->addRoute("POST", "/api/deleteAccount", function () {
+        require $_SERVER['DOCUMENT_ROOT'] . "/src/api/deleteAccount.php";
+    });
     $r->addRoute("POST", "/api/auth/sign-up", function () {
         require $_SERVER['DOCUMENT_ROOT'] . "/src/api/auth/sign-up.php";
     });

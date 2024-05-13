@@ -16,7 +16,7 @@
   \***********************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
-eval("__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var _src_js_createForm_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../../../src/js/createForm.js */ \"./src/js/createForm.js\");\n\n\n\n//# sourceURL=webpack://ecommerce-store/./dist/createGameScripts.js?");
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var _src_js_createForm_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../../../src/js/createForm.js */ \"./src/js/createForm.js\");\n\r\n\n\n//# sourceURL=webpack://ecommerce-store/./dist/createGameScripts.js?");
 
 /***/ }),
 
@@ -26,7 +26,7 @@ eval("__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var _src
   \******************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
-eval("__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var zod__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! zod */ \"./node_modules/zod/lib/index.mjs\");\n\n\nconst schema = zod__WEBPACK_IMPORTED_MODULE_0__.object({\n  username: zod__WEBPACK_IMPORTED_MODULE_0__.string().min(1).max(20),\n});\n\ndocument\n  .getElementById(\"create-form\")\n  .addEventListener(\"submit\", async function (event) {\n    event.preventDefault();\n\n    const formData = new FormData(this); // Create a FormData object from the form\n    const userData = {\n      username: formData.get(\"username\"),\n    };\n\n    const result = schema.safeParse(userData);\n\n    if (!result.success) {\n      alert(\"Invalid data\");\n      console.error(result.error);\n      return;\n    }\n\n    const res = await fetch(\"/api/create-game\", {\n      method: \"POST\",\n      body: formData,\n    });\n\n    if (!res.ok) {\n      alert(\"Failed to create game\");\n      console.error(\"Failed to create game\");\n      return;\n    }\n\n    const { gameId } = await res.json();\n\n    window.location.href = `/new-game/${gameId}`;\n  });\n\n\n//# sourceURL=webpack://ecommerce-store/./src/js/createForm.js?");
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var zod__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! zod */ \"./node_modules/zod/lib/index.mjs\");\n\r\n\r\nconst schema = zod__WEBPACK_IMPORTED_MODULE_0__.object({\r\n  username: zod__WEBPACK_IMPORTED_MODULE_0__.string().min(1).max(20),\r\n});\r\n\r\ndocument\r\n  .getElementById(\"create-form\")\r\n  .addEventListener(\"submit\", async function (event) {\r\n    event.preventDefault();\r\n\r\n    const formData = new FormData(this); // Create a FormData object from the form\r\n    const userData = {\r\n      username: formData.get(\"username\"),\r\n    };\r\n\r\n    const result = schema.safeParse(userData);\r\n\r\n    if (!result.success) {\r\n      alert(\"Invalid data\");\r\n      console.error(result.error);\r\n      return;\r\n    }\r\n\r\n    const res = await fetch(\"/api/create-game\", {\r\n      method: \"POST\",\r\n      body: formData,\r\n    });\r\n\r\n    if (!res.ok) {\r\n      alert(\"Failed to create game\");\r\n      console.error(\"Failed to create game\");\r\n      return;\r\n    }\r\n\r\n    const { gameId } = await res.json();\r\n\r\n    window.location.href = `/new-game/${gameId}`;\r\n  });\r\n\n\n//# sourceURL=webpack://ecommerce-store/./src/js/createForm.js?");
 
 /***/ }),
 
