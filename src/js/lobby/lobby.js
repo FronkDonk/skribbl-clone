@@ -34,6 +34,7 @@ const userStatus = {
   username: data.username,
   user: data.id,
   online_at: new Date().getTime(),
+  avatar: data.avatar,
 };
 
 gameRoom.subscribe(async (status) => {

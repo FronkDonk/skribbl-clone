@@ -26,7 +26,9 @@ export function renderScoreboard(players) {
       player.score
     }</p>
           </div>
-          <div class="relative flex h-14 w-14 shrink-0 overflow-hidden rounded-full bg-gradient-to-tr from-[#7FB2FF] to-[#FF7F7F]"></div>
+          <div class="relative flex h-14 w-14 shrink-0 overflow-hidden rounded-full bg-gradient-to-tr ${
+            player.avatar
+          }"></div>
         </div>
       </div>
     `;
@@ -46,6 +48,8 @@ export function drawingUI({ word, drawingTime }) {
   drawDiv.innerHTML = div;
   const input = document.getElementById("message");
   input.disabled = true;
+  input.classList.add("disabled");
+  input.readOnly = true;
 
   countdown(drawingTime);
 }
@@ -57,6 +61,7 @@ export function gameFinished() {}
 export function countdown(seconds) {
   let remaining = seconds;
   const counterElement = document.getElementById("counter");
+  const input = document.getElementById("message");
 
   const intervalId = setInterval(() => {
     counterElement.textContent = remaining;
@@ -69,6 +74,9 @@ export function countdown(seconds) {
     ) {
       clearInterval(intervalId);
       counterElement.textContent = "";
+      input.disabled = false;
+      input.classList.remove("disabled");
+      input.readOnly = false;
     }
   }, 1000);
 }

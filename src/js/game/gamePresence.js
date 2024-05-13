@@ -22,10 +22,6 @@ export let timer;
 export let roundFinsihedEarly = false;
 export let roundState = "not-started";
 
-export function setRoundFinsihedEarly() {
-  roundFinsihedEarly = false;
-}
-
 const [player, gameData] = await Promise.all([
   getPlayer(),
   getGameData({ gameId }),
@@ -49,6 +45,7 @@ export const userStatus = {
   score: player.score,
   rounds: +gameData.num_rounds,
   drawingTime: +gameData.drawing_time,
+  avatar: player.avatar,
 };
 
 gameRoom.subscribe(async (status) => {
@@ -74,6 +71,7 @@ gameRoom
           score: value[0].score,
           isOwner: value[0].isOwner,
           isClient: value[0].id === userStatus.id,
+          avatar: value[0].avatar,
         });
         console.log(players);
         clientPlayer = players.find((player) => player.isClient === true);
@@ -163,7 +161,6 @@ function startDrawingTime(player) {
     }, userStatus.drawingTime * 1000);
   }
 }
-console.log({ drawingTime: userStatus.drawingTime });
 
 gameRoom.on("broadcast", { event: "choose-word" }, async ({ payload }) => {
   console.log("choose-word", payload);
@@ -226,6 +223,9 @@ gameRoom.on("broadcast", { event: "times-up" }, ({ payload }) => {
 gameRoom.on("broadcast", { event: "finished" }, ({ payload }) => {
   if (userStatus.isOwner) {
   }
+  console.log("game finished");
+  const gameSection = document.getElementById("section");
+  gameSection.style.display = "none";
   const finishedDiv = document.getElementById("gameFinished");
 
   finishedDiv.style.display = "block";
@@ -233,10 +233,17 @@ gameRoom.on("broadcast", { event: "finished" }, ({ payload }) => {
   const sortedPlayers = players.sort((a, b) => b.score - a.score);
 
   const winner = sortedPlayers[0].username;
-
   const div = `
-  
+    <div class="flex flex-col gap-2 items-center">
+      <h1 class="text-3xl font-bold">Game Over</h1>
+      <p class="text-lg">The winner is ${winner}</p>
+      <a href="/">
+        <button id="playAgain" class="bg-primary text-white p-2 rounded-lg">return</button>
+      </a>
+    </div>
   `;
+
+  finishedDiv.innerHTML = div;
 });
 
 function handleWordClick(e, player, drawerId) {

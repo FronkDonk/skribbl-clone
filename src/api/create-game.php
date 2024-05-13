@@ -6,6 +6,7 @@ use Ramsey\Uuid\Uuid;
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     require $_SERVER['DOCUMENT_ROOT'] . '/src/validators/index.php';
+    require $_SERVER['DOCUMENT_ROOT'] . "/src/constants/constants.php";
 
     $validator = new Validator();
 
@@ -23,14 +24,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $id = Uuid::uuid4()->toString();
         $_SESSION["playerId"] = $id;
 
+
+        $randomIndex = array_rand($colors, 1);
+        $avatar = $colors[$randomIndex];
+
         try {
             $client->set("game:$gameId", true);
-            $query = $db->prepare("INSERT INTO room_players (id, username, game_room_id, score, is_owner, user_id) VALUES (:id, :username, :gameId, 0, :is_owner, :user_id)");
+            $query = $db->prepare("INSERT INTO room_players (id, username, game_room_id, score, is_owner, user_id, avatar) VALUES (:id, :username, :gameId, 0, :is_owner, :user_id, :avatar)");
             $query->bindValue(':id', $id);
             $query->bindValue(':gameId', $gameId);
             $query->bindValue(':username', $_POST["username"]);
             $query->bindValue(':is_owner', true);
             $query->bindValue(':user_id', $_SESSION["userId"] ?? null);
+            $query->bindValue(':avatar', $avatar);
             $query->execute();
 
 

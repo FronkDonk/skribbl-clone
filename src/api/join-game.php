@@ -19,7 +19,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (empty($errors)) {
         require $_SERVER['DOCUMENT_ROOT'] . "/src/db/db.php";
         require $_SERVER['DOCUMENT_ROOT'] . "/src/db/redis.php";
-
+        require $_SERVER['DOCUMENT_ROOT'] . "/src/constants/constants.php";
         try {
             $gameId = $_POST['gameId'];
             $existingGame = $client->get("game:$gameId");
@@ -31,11 +31,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $id = Uuid::uuid4()->toString();
             $_SESSION["playerId"] = $id;
 
-            $query = $db->prepare("INSERT INTO room_players (id, username, game_room_id, score, is_owner) VALUES (:id, :username, :gameId, 0, :is_owner)");
+            //generate random index from colors array
+
+
+            $randomIndex = array_rand($colors, 1);
+            $avatar = $colors[$randomIndex];
+
+
+            $query = $db->prepare("INSERT INTO room_players (id, username, game_room_id, score, is_owner, avatar) VALUES (:id, :username, :gameId, 0, :is_owner, :avatar)");
             $query->bindValue(':id', $id);
             $query->bindValue(':gameId', $gameId);
             $query->bindValue(':username', $_POST["username"]);
             $query->bindValue(':is_owner', 0);
+            $query->bindValue(':avatar', $avatar);
             $query->execute();
 
 

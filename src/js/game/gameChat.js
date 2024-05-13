@@ -23,6 +23,7 @@ const chatMessage = z.object({
   userId: z.string().uuid(),
   username: z.string(),
   sentAt: z.string(),
+  avatar: z.string(),
 });
 
 const path = window.location.pathname;
@@ -48,6 +49,7 @@ document
       gameId: gameId,
       userId: userStatus.id,
       username: userStatus.username,
+      avatar: userStatus.avatar,
       sentAt: new Date().toISOString(),
     };
 
@@ -58,16 +60,16 @@ document
       return;
     }
 
-    const { message, userId, username, sentAt } = result.data;
+    const { message, userId, username, sentAt, avatar } = result.data;
 
     const chat = document.getElementById("chat");
     const input = document.getElementById("message");
-    input.innerText = "";
+    input.value = "";
 
     const div = `
   <div id="message-${sentAt}" class="p-2 bg-muted rounded-md flex items-center gap-2">
 
-  <div class="relative flex flex-col gap-2 h-10 w-10 shrink-0 overflow-hidden rounded-full bg-gradient-to-tr from-[#7FB2FF] to-[#FF7F7F]"></div>
+  <div class="relative flex flex-col gap-2 h-10 w-10 shrink-0 overflow-hidden rounded-full bg-gradient-to-tr ${avatar}"></div>
       <div class="flex flex-col gap-px ">
           <label class="text-base">${username}</label>
           <p class="text-sm ">${message}</p>
@@ -92,6 +94,7 @@ document
         userId,
         isCorrect,
         sentAt,
+        avatar,
       },
     });
 
@@ -102,7 +105,6 @@ document
       correctGuesses.push(userId);
       console.log(correctGuesses);
       if (correctGuesses.length === players.length - 1) {
-        setRoundFinsihedEarly();
         timesUp();
       }
       renderScoreboard(players);
@@ -119,18 +121,14 @@ document
 gameChat.on("broadcast", { event: "new-message" }, ({ payload }) => {
   console.log("new-message");
 
-  const message = payload.message;
-  const username = payload.username;
-  const userId = payload.userId;
-  const isCorrect = payload.isCorrect;
-  const sentAt = payload.sentAt;
+  const { message, username, userId, isCorrect, sentAt, avatar } = payload;
 
   const chat = document.getElementById("chat");
 
   const div = `<div id="message-${sentAt}" class="${
     isCorrect && "border-primary"
   } p-2 border bg-muted rounded-md flex items-center gap-2">
-    <div class="relative flex flex-col gap-2 h-10 w-10 shrink-0 overflow-hidden rounded-full bg-gradient-to-tr from-[#7FB2FF] to-[#FF7F7F]"></div>
+    <div class="relative flex flex-col gap-2 h-10 w-10 shrink-0 overflow-hidden rounded-full bg-gradient-to-tr ${avatar}"></div>
         <div class="flex flex-col gap-px ">
             <label class="text-base">${username}</label>
             <p class="text-sm ">${isCorrect ? "guessed the word" : message}</p>

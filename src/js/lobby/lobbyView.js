@@ -25,7 +25,7 @@ export async function renderOnlineUsers(players) {
     if (existingPlayer) return;
     const div = `
    <article id=${player.user} class="flex px-2 py-1 items-center gap-2 border-2 border-input rounded-lg">
-        <div class="relative flex h-10 w-10 shrink-0 overflow-hidden rounded-full bg-gradient-to-tr from-[#7FB2FF] to-[#FF7F7F]">
+        <div class="relative flex h-10 w-10 shrink-0 overflow-hidden rounded-full bg-gradient-to-tr ${player.avatar}">
         </div>
           <p class="font-medium text-lg">${player.username}</p>
     </article>

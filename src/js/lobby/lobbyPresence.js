@@ -31,6 +31,7 @@ gameRoom
           user: value[0].user,
           online_at: value[0].online_at,
           isClient: value[0].user === id ? true : false,
+          avatar: value[0].avatar,
           owner: false,
         });
       }

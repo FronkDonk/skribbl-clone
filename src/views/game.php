@@ -66,13 +66,8 @@
 
             </div>
         </section>
-        <section class="" id="gameFinished">
-            <div class="flex flex-col gap-2 items-center">
-                <h1 class="text-3xl font-bold">Game Over</h1>
-                <p class="text-lg">The word was <span id="word"></span></p>
-                <p class="text-lg">The winner is <span id="winner"></span></p>
-                <button id="playAgain" class="bg-primary text-white p-2 rounded-lg">Play Again</button>
-            </div>
+        <section class="hidden" id="gameFinished">
+
         </section>
 
 

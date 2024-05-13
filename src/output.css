@@ -1000,6 +1000,42 @@ video {
   --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to);
 }
 
+.from-\[\#008000\] {
+  --tw-gradient-from: #008000 var(--tw-gradient-from-position);
+  --tw-gradient-to: rgb(0 128 0 / 0) var(--tw-gradient-to-position);
+  --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to);
+}
+
+.from-\[\#800080\] {
+  --tw-gradient-from: #800080 var(--tw-gradient-from-position);
+  --tw-gradient-to: rgb(128 0 128 / 0) var(--tw-gradient-to-position);
+  --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to);
+}
+
+.from-\[\#FF0000\] {
+  --tw-gradient-from: #FF0000 var(--tw-gradient-from-position);
+  --tw-gradient-to: rgb(255 0 0 / 0) var(--tw-gradient-to-position);
+  --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to);
+}
+
+.from-\[\#FF6347\] {
+  --tw-gradient-from: #FF6347 var(--tw-gradient-from-position);
+  --tw-gradient-to: rgb(255 99 71 / 0) var(--tw-gradient-to-position);
+  --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to);
+}
+
+.from-\[\#FFA500\] {
+  --tw-gradient-from: #FFA500 var(--tw-gradient-from-position);
+  --tw-gradient-to: rgb(255 165 0 / 0) var(--tw-gradient-to-position);
+  --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to);
+}
+
+.from-\[\#FFD700\] {
+  --tw-gradient-from: #FFD700 var(--tw-gradient-from-position);
+  --tw-gradient-to: rgb(255 215 0 / 0) var(--tw-gradient-to-position);
+  --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to);
+}
+
 .to-\[\#90EE90\] {
   --tw-gradient-to: #90EE90 var(--tw-gradient-to-position);
 }
@@ -1018,6 +1054,34 @@ video {
 
 .to-\[\#FFFF7F\] {
   --tw-gradient-to: #FFFF7F var(--tw-gradient-to-position);
+}
+
+.to-\[\#00FFFF\] {
+  --tw-gradient-to: #00FFFF var(--tw-gradient-to-position);
+}
+
+.to-\[\#FF00FF\] {
+  --tw-gradient-to: #FF00FF var(--tw-gradient-to-position);
+}
+
+.to-\[\#FF4500\] {
+  --tw-gradient-to: #FF4500 var(--tw-gradient-to-position);
+}
+
+.to-\[\#FF7F50\] {
+  --tw-gradient-to: #FF7F50 var(--tw-gradient-to-position);
+}
+
+.to-\[\#FFA500\] {
+  --tw-gradient-to: #FFA500 var(--tw-gradient-to-position);
+}
+
+.to-\[\#FFD700\] {
+  --tw-gradient-to: #FFD700 var(--tw-gradient-to-position);
+}
+
+.to-\[\#FFFF00\] {
+  --tw-gradient-to: #FFFF00 var(--tw-gradient-to-position);
 }
 
 .stroke-destructive {
