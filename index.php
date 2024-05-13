@@ -14,6 +14,9 @@ $dispatcher = FastRoute\simpleDispatcher(function (FastRoute\RouteCollector $r) 
     $r->addRoute('GET', '/profile', function () {
         require $_SERVER['DOCUMENT_ROOT'] . "/src/views/profile.php";
     });
+    $r->addRoute('GET', '/profile/games', function () {
+        require $_SERVER['DOCUMENT_ROOT'] . "/src/views/prevGames.php";
+    });
     /*    $r->addRoute('GET', '/game', function () {
            header("Location: /");
            exit ();
