@@ -20,6 +20,7 @@ document
     const result = signInSchema.safeParse(data);
 
     if (!result.success) {
+      alert("Invalid data");
       //return error message or something
 
       console.error(result.error);
@@ -32,9 +33,11 @@ document
     if (!res.ok) {
       const data = await res.json();
       console.log(`Error: ${data.message}`);
+      alert("Error signing in. Please try again.");
     } else {
       const { data } = await res.json();
       // Log the response body to the console
       console.log(data);
+      window.location.href = "/create-game";
     }
   });

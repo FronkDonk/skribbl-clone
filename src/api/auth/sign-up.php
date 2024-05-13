@@ -1,5 +1,6 @@
 <?php
 require $_SERVER['DOCUMENT_ROOT'] . '/vendor/autoload.php';
+use Ramsey\Uuid\Uuid;
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     require $_SERVER['DOCUMENT_ROOT'] . '/src/validators/index.php';
@@ -27,14 +28,17 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 exit;
             }
             $hashedPassword = password_hash($_POST["password"], PASSWORD_DEFAULT);
-
-            $user = $db->prepare("INSERT INTO users (username, email, password) VALUES (:username, :email, :password)");
+            $id = Uuid::uuid4()->toString();
+            $user = $db->prepare("INSERT INTO users (id, username, email, password) VALUES (:id, :username, :email, :password)");
 
             $user->bindValue(':username', $_POST["username"]);
             $user->bindValue(':email', $_POST["email"]);
             $user->bindValue(':password', $hashedPassword);
+            $user->bindValue(':id', $id);
             $user->execute();
 
+
+            $_SESSION["userId"] = $id;
             http_response_code(200);
             echo json_encode(['message' => 'Success']);
             exit;

@@ -23,6 +23,7 @@ document
 
     if (!result.success) {
       //return error message or something
+      alert("Invalid data");
 
       console.error(result.error);
     }
@@ -32,10 +33,10 @@ document
       body: formData,
     });
     if (!res.ok) {
-      throw new Error(`HTTP error! status: ${res.status}`);
+      alert("Error signing up. Please try again.");
     } else {
       const { data } = await res.json();
       // Log the response body to the console
-      console.log(data);
+      window.location.href = "/create-game";
     }
   });
