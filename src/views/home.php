@@ -17,11 +17,11 @@
     $blade = new Blade($_SERVER['DOCUMENT_ROOT'] . '/src/components/ui', $_SERVER['DOCUMENT_ROOT'] . '/src/components/ui/cache');
 
     ?>
+    <?php
+    $blade = new Blade($_SERVER['DOCUMENT_ROOT'] . '/src/components/ui', $_SERVER['DOCUMENT_ROOT'] . '/src/components/ui/cache');
+    echo $blade->make("navbar")->render();
+    ?>
     <main class="bg-background flex flex-col items-center justify-center h-screen">
-
-
-
-
         <section class="flex flex-col gap-10 w-full max-w-xl">
             <div class="flex flex-col gap-3">
                 <h1 class="text-5xl">DrawFuse</h1>

@@ -18,7 +18,11 @@
     $blade = new Blade($_SERVER['DOCUMENT_ROOT'] . '/src/components/ui', $_SERVER['DOCUMENT_ROOT'] . '/src/components/ui/cache');
 
     ?>
-    < class="min-h-screen p-6">
+    <?php
+    $blade = new Blade($_SERVER['DOCUMENT_ROOT'] . '/src/components/ui', $_SERVER['DOCUMENT_ROOT'] . '/src/components/ui/cache');
+    echo $blade->make("navbar")->render();
+    ?>
+    <main class="min-h-screen p-6">
         <section id="section" class="w-full flex flex-col gap-3 ">
             <div id="scoreboard" class="flex flex-wrap gap-2">
             </div>
@@ -72,8 +76,8 @@
         </section>
 
 
-        </main>
-        <script src="/dist/game.bundle.js"></script>
+    </main>
+    <script src="/dist/game.bundle.js"></script>
 </body>
 
 </html>

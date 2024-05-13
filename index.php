@@ -6,6 +6,9 @@ require $_SERVER['DOCUMENT_ROOT'] . '/vendor/autoload.php';
 $dispatcher = FastRoute\simpleDispatcher(function (FastRoute\RouteCollector $r) {
     //pages routes
     $r->addRoute('GET', '/', function () {
+
+
+
         require $_SERVER['DOCUMENT_ROOT'] . "/src/views/home.php";
     });
     $r->addRoute('GET', '/create-game', function () {
@@ -69,6 +72,9 @@ $dispatcher = FastRoute\simpleDispatcher(function (FastRoute\RouteCollector $r) 
     });
     $r->addRoute('POST', '/api/new-game', function () {
         require $_SERVER['DOCUMENT_ROOT'] . "/src/api/new-game.php";
+    });
+    $r->addRoute('GET', '/api/getPrevGames', function () {
+        require $_SERVER['DOCUMENT_ROOT'] . "/src/api/getPrevGames.php";
     });
     $r->addRoute("GET", "/api/getPlayer", function () {
         require $_SERVER['DOCUMENT_ROOT'] . "/src/api/getPlayer.php";

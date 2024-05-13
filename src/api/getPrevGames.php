@@ -7,18 +7,38 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     $userId = $_SESSION["userId"];
 
     try {
-        $query = $db->prepare("SELECT * FROM game_room JOIN ON game_room.id = room_players.game_room_id)
+        // First, fetch the room_players for the user
+        $query = $db->prepare("SELECT * FROM room_players WHERE user_id = :userId");
+        $query->bindValue(':userId', $userId);
+        $query->execute();
+        $userRooms = $query->fetchAll(PDO::FETCH_ASSOC);
 
-        if (!$userData) {
-            http_response_code(404);
-            echo json_encode(['message' => 'User not found']);
-            exit;
+        // Then, for each room_player, fetch the game room and all players
+        foreach ($userRooms as $index => $userRoom) {
+            // Fetch the game room
+            $query = $db->prepare("SELECT * FROM game_room WHERE id = :gameRoomId ORDER BY created_at DESC");
+            $query->bindValue(':gameRoomId', $userRoom['game_room_id']);
+            $query->execute();
+            $gameRoom = $query->fetch(PDO::FETCH_ASSOC);
+
+            // Fetch all players for the game room
+            $query = $db->prepare("SELECT * FROM room_players WHERE game_room_id = :gameRoomId ORDER BY score DESC");
+            $query->bindValue(':gameRoomId', $userRoom['game_room_id']);
+            $query->execute();
+            $players = $query->fetchAll(PDO::FETCH_ASSOC);
+
+            // Filter out the current user
+            /*   $players = array_filter($players, function ($player) use ($userId) {
+                  return $player['user_id'] !== $userId;
+              }); */
+
+
+            // Add the game room and players to the user room
+            $userRooms[$index]['game_room'] = $gameRoom;
+            $userRooms[$index]['players'] = $players;
         }
-
-
-        unset($userData['password']);
         http_response_code(200);
-        echo json_encode(['message' => 'Success', 'data' => $userData]);
+        echo json_encode(['message' => 'Success', 'data' => $userRooms]);
         exit;
     } catch (PDOException $e) {
         http_response_code(500);
