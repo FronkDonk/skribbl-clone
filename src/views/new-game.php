@@ -25,86 +25,96 @@
             <div class="flex flex-col gap-3">
                 <h1 class="text-5xl">DrawFuse</h1>
                 <p class="text-muted-foreground text-lg">Start a new game</p>
-            </div>
-            <div id="players" class="flex gap-3">
+                <div class="flex">
+                    <p class="text-lg">Game id: </p>
+                    <p class="text-muted-foreground">
+                        <?php
+                        $uri = $_SERVER['REQUEST_URI'];
+                        $parts = explode('/', $uri);
+                        $id = end($parts);
 
-            </div>
-            <form id="new-game-form" class="grid gap-4">
-                <div class="grid gap-2">
-                    <?php
-                    echo $blade->make('label', [
-                        "label" => "Maximum players",
-                    ])->render();
-                    echo $blade->make('select', [
-                        "id" => "maxPlayers",
-                        "options" => [
-                            '2',
-                            '4',
-                            '6',
-                            '8',
-                        ]
-                    ])->render();
-                    ?>
+                        echo $id;
+                        ?>
+                    </p>
                 </div>
-                <div class="grid gap-2">
-                    <?php
-                    echo $blade->make('label', [
-                        "label" => "Number of rounds",
-                    ])->render();
-                    echo $blade->make('select', [
-                        "id" => "numRounds",
-                        "options" => [
-                            '3',
-                            '6',
-                            '8',
-                        ]
-                    ])->render();
-                    ?>
+                <div id="players" class="flex gap-3">
                 </div>
-                <div class="grid gap-2">
-                    <?php
-                    echo $blade->make('label', [
-                        "label" => "Drawing time",
-                    ])->render();
-                    echo $blade->make('select', [
-                        "id" => "drawingTime",
-                        "options" => [
-                            '20',
-                            '40',
-                            '60',
-                            '80',
-                        ]
-                    ])->render();
-                    ?>
-                </div>
-                <div class="grid gap-2">
-                    <?php
-                    echo $blade->make('label', [
-                        "label" => "Visibility",
-                    ])->render();
-                    echo $blade->make('select', [
-                        "id" => "visibility",
-                        "options" => [
-                            'Public',
-                            'Private',
-                        ]
-                    ])->render();
-                    ?>
-                </div>
-                <div id="players">
+                <form id="new-game-form" class="grid gap-4">
+                    <div class="grid gap-2">
+                        <?php
+                        echo $blade->make('label', [
+                            "label" => "Maximum players",
+                        ])->render();
+                        echo $blade->make('select', [
+                            "id" => "maxPlayers",
+                            "options" => [
+                                '2',
+                                '4',
+                                '6',
+                                '8',
+                            ]
+                        ])->render();
+                        ?>
+                    </div>
+                    <div class="grid gap-2">
+                        <?php
+                        echo $blade->make('label', [
+                            "label" => "Number of rounds",
+                        ])->render();
+                        echo $blade->make('select', [
+                            "id" => "numRounds",
+                            "options" => [
+                                '3',
+                                '6',
+                                '8',
+                            ]
+                        ])->render();
+                        ?>
+                    </div>
+                    <div class="grid gap-2">
+                        <?php
+                        echo $blade->make('label', [
+                            "label" => "Drawing time",
+                        ])->render();
+                        echo $blade->make('select', [
+                            "id" => "drawingTime",
+                            "options" => [
+                                '20',
+                                '40',
+                                '60',
+                                '80',
+                            ]
+                        ])->render();
+                        ?>
+                    </div>
+                    <div class="grid gap-2">
+                        <?php
+                        echo $blade->make('label', [
+                            "label" => "Visibility",
+                        ])->render();
+                        echo $blade->make('select', [
+                            "id" => "visibility",
+                            "options" => [
+                                'Public',
+                                'Private',
+                            ]
+                        ])->render();
+                        ?>
+                    </div>
+                    <div id="players">
 
-                </div>
-                <?php
-                echo $blade->make('button', [
-                    "label" => "Start game",
-                    "type" => "submit",
-                    "class" => "w-full",
-                    "id" => "startGame",
-                    "icon" => false
-                ])->render();
-                ?>
-                <input type="hidden" name="game-id" id="game-id" value="">
-            </form>
+                    </div>
+                    <?php
+                    echo $blade->make('button', [
+                        "label" => "Start game",
+                        "type" => "submit",
+                        "class" => "w-full",
+                        "id" => "startGame",
+                        "icon" => false
+                    ])->render();
+                    ?>
+                    <input type="hidden" name="game-id" id="game-id" value="">
+                </form>
         </section>
     </main>
     <script src="/dist/lobby.bundle.js"></script>

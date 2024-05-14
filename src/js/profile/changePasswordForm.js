@@ -1,10 +1,34 @@
+import * as z from "zod";
+
+const schema = z.object({
+  password: z.string().min(6).max(100),
+  newPassword: z.string().min(6).max(100),
+  confirmPassword: z.string().min(6).max(100),
+  csrfToken: z.string(),
+});
+
 document
   .getElementById("password-form")
   .addEventListener("submit", async (event) => {
     event.preventDefault();
-    const password = document.getElementById("password").value;
-    const newPassword = document.getElementById("newPassword").value;
-    const confirmPassword = document.getElementById("confirmPassword").value;
+
+    const formData = new FormData(event.target);
+
+    const data = {
+      password: formData.get("password"),
+      newPassword: formData.get("newPassword"),
+      confirmPassword: formData.get("confirmPassword"),
+      csrfToken: formData.get("csrf_Token"),
+    };
+
+    const result = schema.safeParse(data);
+
+    if (!result.success) {
+      alert("Invalid data");
+      return;
+    }
+
+    const { password, newPassword, confirmPassword, csrfToken } = result.data;
 
     if (newPassword !== confirmPassword) {
       alert("Passwords do not match");
@@ -15,6 +39,7 @@ document
       method: "POST",
       headers: {
         "Content-Type": "application/x-www-form-urlencoded",
+        "X-CSRF-Token": csrfToken,
       },
       body: `password=${password}&newPassword=${newPassword}`,
     });

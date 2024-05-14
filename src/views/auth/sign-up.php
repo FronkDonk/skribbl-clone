@@ -89,7 +89,7 @@
                 </form>
                 <div class="mt-4 text-center text-sm">
                     Already have an account?
-                    <a href="#" class="underline ">
+                    <a href="/auth/sign-in" class="underline ">
                         Sign in
                     </a>
                 </div>

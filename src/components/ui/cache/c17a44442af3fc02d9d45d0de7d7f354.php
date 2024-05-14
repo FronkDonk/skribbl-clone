@@ -1,23 +1,37 @@
 <?php
-require $_SERVER['DOCUMENT_ROOT'] . '/vendor/autoload.php';
-
 use Jenssegers\Blade\Blade;
 
-$blade = new Blade($_SERVER['DOCUMENT_ROOT'] . '/src/components/ui', $_SERVER['DOCUMENT_ROOT'] . '/src/components/ui/cache');
-
+$blade = new Blade($_SERVER['DOCUMENT_ROOT'] . '/src/components/ui', $_SERVER['DOCUMENT_ROOT'] . '/temp');
 ?>
-<nav class="flex items-center justify-between w-full px-6 py-3 border-b shadow-sm sticky top-0 z-50 bg-background ">
-    <a class="text-2xl font-semibold leading-none tracking-tight" href="#">DrawFuse</a>
 
-    <div>
+<header class="sticky top-0 flex justify-between h-16 items-center gap-4 border-b bg-background px-4 md:px-6">
+    <nav class="font-medium flex flex-row items-center gap-5 text-sm lg:gap-6">
+        <a class="transition-colors text-lg hover:text-muted-foreground font-semibold " href="/">
+            DrawFuse
+        </a>
+        <a class="text-muted-foreground transition-colors hover:text-foreground" href="/create-game">
+            Create game
+        </a>
+        <a class="text-muted-foreground transition-colors hover:text-foreground" href="/">
+            Join game
+        </a>
+        <a class="text-muted-foreground transition-colors hover:text-foreground" href="/profile">
+            Profile
+        </a>
+    </nav>
+    <a href="/auth/sign-out">
         <?php
-        echo $blade
-            ->make('avatar', [
-                'label' => 'Home',
-                'class' => 'from-[#7FB2FF] to-[#FF7F7F]',
-            ])
-            ->render();
+        if (isset($_SESSION['userId'])) {
+            echo $blade
+                ->make('button', [
+                    'label' => 'Sign out',
+                    'icon' => false,
+                    'type' => '',
+                    'class' => '',
+                ])
+                ->render();
+        }
         ?>
-    </div>
-</nav>
+    </a>
+</header>
 <?php /**PATH C:\xampp\htdocs\skribbl-clone\src\components\ui/navbar.blade.php ENDPATH**/ ?>

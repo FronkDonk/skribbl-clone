@@ -1,6 +1,5 @@
 <?php
 require $_SERVER['DOCUMENT_ROOT'] . '/vendor/autoload.php';
-use Respect\Validation\Validator as v;
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     header('Content-Type: application/json');
@@ -34,5 +33,4 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         echo json_encode(['message' => $e->getMessage()]);
         exit;
     }
-
 }
