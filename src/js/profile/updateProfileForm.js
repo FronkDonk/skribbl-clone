@@ -16,12 +16,13 @@ document
     const data = {
       username: formData.get("username"),
       email: formData.get("email"),
-      csrfToken: formData.get("csrf_Token"),
+      csrfToken: formData.get("csrf_token"),
     };
 
     const result = schema.safeParse(data);
 
     if (!result.success) {
+      console.error(result.error);
       alert("Invalid data");
       return;
     }

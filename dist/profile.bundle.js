@@ -13,10 +13,10 @@
 /*!********************************!*\
   !*** ./dist/profileScripts.js ***!
   \********************************/
-/***/ ((module, __webpack_exports__, __webpack_require__) => {
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
-eval("__webpack_require__.a(module, async (__webpack_handle_async_dependencies__, __webpack_async_result__) => { try {\n__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var _src_js_profile_profile_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../../../src/js/profile/profile.js */ \"./src/js/profile/profile.js\");\n/* harmony import */ var _src_js_profile_changePasswordForm_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../../src/js/profile/changePasswordForm.js */ \"./src/js/profile/changePasswordForm.js\");\n/* harmony import */ var _src_js_profile_changePasswordForm_js__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_src_js_profile_changePasswordForm_js__WEBPACK_IMPORTED_MODULE_1__);\n/* harmony import */ var _src_js_profile_updateProfileForm_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../src/js/profile/updateProfileForm.js */ \"./src/js/profile/updateProfileForm.js\");\n/* harmony import */ var _src_js_actions_getProfileData_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../../src/js/actions/getProfileData.js */ \"./src/js/actions/getProfileData.js\");\n/* harmony import */ var _src_js_profile_deleteAccountForm_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../../../src/js/profile/deleteAccountForm.js */ \"./src/js/profile/deleteAccountForm.js\");\nvar __webpack_async_dependencies__ = __webpack_handle_async_dependencies__([_src_js_profile_profile_js__WEBPACK_IMPORTED_MODULE_0__]);\n_src_js_profile_profile_js__WEBPACK_IMPORTED_MODULE_0__ = (__webpack_async_dependencies__.then ? (await __webpack_async_dependencies__)() : __webpack_async_dependencies__)[0];\n\r\n\r\n\r\n\r\n\r\n\n__webpack_async_result__();\n} catch(e) { __webpack_async_result__(e); } });\n\n//# sourceURL=webpack://ecommerce-store/./dist/profileScripts.js?");
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var _src_js_profile_profile_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../../../src/js/profile/profile.js */ \"./src/js/profile/profile.js\");\n/* harmony import */ var _src_js_profile_profile_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_src_js_profile_profile_js__WEBPACK_IMPORTED_MODULE_0__);\n/* harmony import */ var _src_js_profile_changePasswordForm_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../../src/js/profile/changePasswordForm.js */ \"./src/js/profile/changePasswordForm.js\");\n/* harmony import */ var _src_js_profile_updateProfileForm_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../src/js/profile/updateProfileForm.js */ \"./src/js/profile/updateProfileForm.js\");\n/* harmony import */ var _src_js_actions_getProfileData_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../../src/js/actions/getProfileData.js */ \"./src/js/actions/getProfileData.js\");\n/* harmony import */ var _src_js_profile_deleteAccountForm_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../../../src/js/profile/deleteAccountForm.js */ \"./src/js/profile/deleteAccountForm.js\");\n\r\n\r\n\r\n\r\n\r\n\n\n//# sourceURL=webpack://ecommerce-store/./dist/profileScripts.js?");
 
 /***/ }),
 
@@ -35,9 +35,10 @@ eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpac
 /*!**********************************************!*\
   !*** ./src/js/profile/changePasswordForm.js ***!
   \**********************************************/
-/***/ (() => {
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
-eval("document\r\n  .getElementById(\"password-form\")\r\n  .addEventListener(\"submit\", async (event) => {\r\n    event.preventDefault();\r\n    const password = document.getElementById(\"password\").value;\r\n    const newPassword = document.getElementById(\"newPassword\").value;\r\n    const confirmPassword = document.getElementById(\"confirmPassword\").value;\r\n\r\n    if (newPassword !== confirmPassword) {\r\n      alert(\"Passwords do not match\");\r\n      return;\r\n    }\r\n\r\n    const res = await fetch(\"/api/changePassword\", {\r\n      method: \"POST\",\r\n      headers: {\r\n        \"Content-Type\": \"application/x-www-form-urlencoded\",\r\n      },\r\n      body: `password=${password}&newPassword=${newPassword}`,\r\n    });\r\n\r\n    if (!res.ok) {\r\n      const data = await res.json();\r\n      alert(data.message);\r\n    } else {\r\n      alert(\"Password changed successfully\");\r\n    }\r\n  });\r\n\n\n//# sourceURL=webpack://ecommerce-store/./src/js/profile/changePasswordForm.js?");
+"use strict";
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var zod__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! zod */ \"./node_modules/zod/lib/index.mjs\");\n\r\n\r\nconst schema = zod__WEBPACK_IMPORTED_MODULE_0__.object({\r\n  password: zod__WEBPACK_IMPORTED_MODULE_0__.string().min(6).max(100),\r\n  newPassword: zod__WEBPACK_IMPORTED_MODULE_0__.string().min(6).max(100),\r\n  confirmPassword: zod__WEBPACK_IMPORTED_MODULE_0__.string().min(6).max(100),\r\n  csrfToken: zod__WEBPACK_IMPORTED_MODULE_0__.string(),\r\n});\r\n\r\ndocument\r\n  .getElementById(\"password-form\")\r\n  .addEventListener(\"submit\", async (event) => {\r\n    event.preventDefault();\r\n\r\n    const formData = new FormData(event.target);\r\n\r\n    const data = {\r\n      password: formData.get(\"password\"),\r\n      newPassword: formData.get(\"new-password\"),\r\n      confirmPassword: formData.get(\"confirm-password\"),\r\n      csrfToken: formData.get(\"csrf_token\"),\r\n    };\r\n\r\n    const result = schema.safeParse(data);\r\n\r\n    if (!result.success) {\r\n      console.error(result.error);\r\n      alert(\"Invalid data\");\r\n      return;\r\n    }\r\n\r\n    const { password, newPassword, confirmPassword, csrfToken } = result.data;\r\n\r\n    if (newPassword !== confirmPassword) {\r\n      alert(\"Passwords do not match\");\r\n      return;\r\n    }\r\n\r\n    const res = await fetch(\"/api/changePassword\", {\r\n      method: \"POST\",\r\n      headers: {\r\n        \"Content-Type\": \"application/x-www-form-urlencoded\",\r\n        \"X-CSRF-Token\": csrfToken,\r\n      },\r\n      body: `password=${password}&newPassword=${newPassword}`,\r\n    });\r\n\r\n    if (!res.ok) {\r\n      const data = await res.json();\r\n      alert(data.message);\r\n    } else {\r\n      alert(\"Password changed successfully\");\r\n    }\r\n  });\r\n\n\n//# sourceURL=webpack://ecommerce-store/./src/js/profile/changePasswordForm.js?");
 
 /***/ }),
 
@@ -48,7 +49,7 @@ eval("document\r\n  .getElementById(\"password-form\")\r\n  .addEventListener(\"
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
-eval("__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var zod__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! zod */ \"./node_modules/zod/lib/index.mjs\");\n\r\n\r\nconst schema = zod__WEBPACK_IMPORTED_MODULE_0__.object({\r\n  password: zod__WEBPACK_IMPORTED_MODULE_0__.string(),\r\n});\r\n\r\ndocument\r\n  .getElementById(\"delete-account\")\r\n  .addEventListener(\"submit\", async (event) => {\r\n    event.preventDefault();\r\n\r\n    const formData = new FormData(event.target);\r\n\r\n    const data = {\r\n      password: formData.get(\"delete\"),\r\n    };\r\n\r\n    const result = schema.safeParse(data);\r\n\r\n    if (!result.success) {\r\n      alert(\"invalid data\");\r\n      console.error(result.error);\r\n    }\r\n    const { password } = result.data;\r\n    const res = await fetch(\"/api/deleteAccount\", {\r\n      method: \"POST\",\r\n      headers: {\r\n        \"Content-Type\": \"application/x-www-form-urlencoded\",\r\n      },\r\n      body: `password=${password}`,\r\n    });\r\n\r\n    if (!res.ok) {\r\n      const data = await res.json();\r\n      alert(data.message);\r\n    } else {\r\n      alert(\"Account deleted successfully!\");\r\n\r\n      window.location.href = \"/\";\r\n    }\r\n  });\r\n\n\n//# sourceURL=webpack://ecommerce-store/./src/js/profile/deleteAccountForm.js?");
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var zod__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! zod */ \"./node_modules/zod/lib/index.mjs\");\n\r\n\r\nconst schema = zod__WEBPACK_IMPORTED_MODULE_0__.object({\r\n  password: zod__WEBPACK_IMPORTED_MODULE_0__.string(),\r\n  csrfToken: zod__WEBPACK_IMPORTED_MODULE_0__.string(),\r\n});\r\n\r\ndocument\r\n  .getElementById(\"delete-account\")\r\n  .addEventListener(\"submit\", async (event) => {\r\n    event.preventDefault();\r\n\r\n    const formData = new FormData(event.target);\r\n\r\n    const data = {\r\n      password: formData.get(\"delete\"),\r\n      csrfToken: formData.get(\"csrf_token\"),\r\n    };\r\n\r\n    const result = schema.safeParse(data);\r\n\r\n    if (!result.success) {\r\n      alert(\"invalid data\");\r\n      console.error(result.error);\r\n    }\r\n    const { password, csrfToken } = result.data;\r\n    const res = await fetch(\"/api/deleteAccount\", {\r\n      method: \"POST\",\r\n      headers: {\r\n        \"Content-Type\": \"application/x-www-form-urlencoded\",\r\n        \"X-CSRF-Token\": csrfToken,\r\n      },\r\n      body: `password=${password}`,\r\n    });\r\n\r\n    if (!res.ok) {\r\n      const data = await res.json();\r\n      alert(data.message);\r\n    } else {\r\n      alert(\"Account deleted successfully!\");\r\n\r\n      window.location.href = \"/\";\r\n    }\r\n  });\r\n\n\n//# sourceURL=webpack://ecommerce-store/./src/js/profile/deleteAccountForm.js?");
 
 /***/ }),
 
@@ -56,10 +57,9 @@ eval("__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var zod_
 /*!***********************************!*\
   !*** ./src/js/profile/profile.js ***!
   \***********************************/
-/***/ ((module, __webpack_exports__, __webpack_require__) => {
+/***/ (() => {
 
-"use strict";
-eval("__webpack_require__.a(module, async (__webpack_handle_async_dependencies__, __webpack_async_result__) => { try {\n__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var _actions_getProfileData__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../actions/getProfileData */ \"./src/js/actions/getProfileData.js\");\n\r\n\r\nconst userData = await (0,_actions_getProfileData__WEBPACK_IMPORTED_MODULE_0__.getProfileData)();\r\nconst emailInput = document.getElementById(\"email\");\r\nconst usernameInput = document.getElementById(\"username\");\r\n\r\nemailInput.value = userData.email;\r\nusernameInput.value = userData.username;\r\n\n__webpack_async_result__();\n} catch(e) { __webpack_async_result__(e); } }, 1);\n\n//# sourceURL=webpack://ecommerce-store/./src/js/profile/profile.js?");
+eval("/* const emailInput = document.getElementById(\"email\");\r\nconst usernameInput = document.getElementById(\"username\");\r\n\r\nemailInput.value = userData.email;\r\nusernameInput.value = userData.username; */\r\n\n\n//# sourceURL=webpack://ecommerce-store/./src/js/profile/profile.js?");
 
 /***/ }),
 
@@ -70,7 +70,7 @@ eval("__webpack_require__.a(module, async (__webpack_handle_async_dependencies__
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
-eval("__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var zod__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! zod */ \"./node_modules/zod/lib/index.mjs\");\n\r\n\r\nconst schema = zod__WEBPACK_IMPORTED_MODULE_0__.object({\r\n  username: zod__WEBPACK_IMPORTED_MODULE_0__.string().min(3).max(30).optional(),\r\n  email: zod__WEBPACK_IMPORTED_MODULE_0__.string().email().optional(),\r\n});\r\n\r\ndocument\r\n  .getElementById(\"profile-form\")\r\n  .addEventListener(\"submit\", async (event) => {\r\n    event.preventDefault();\r\n\r\n    const formData = new FormData(event.target);\r\n\r\n    const data = {\r\n      username: formData.get(\"username\"),\r\n      email: formData.get(\"email\"),\r\n    };\r\n\r\n    const result = schema.safeParse(data);\r\n\r\n    if (!result.success) {\r\n      alert(\"Invalid data\");\r\n      return;\r\n    }\r\n\r\n    const { email, username } = result.data;\r\n\r\n    const res = await fetch(\"/api/updateProfile\", {\r\n      method: \"POST\",\r\n      headers: {\r\n        \"Content-Type\": \"application/x-www-form-urlencoded\",\r\n      },\r\n      body: `username=${username}&email=${email}`,\r\n    });\r\n\r\n    if (!res.ok) {\r\n      const data = await res.json();\r\n      alert(data.message);\r\n    } else {\r\n      alert(\"Profile updated successfully!\");\r\n    }\r\n  });\r\n\n\n//# sourceURL=webpack://ecommerce-store/./src/js/profile/updateProfileForm.js?");
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var zod__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! zod */ \"./node_modules/zod/lib/index.mjs\");\n\r\n\r\nconst schema = zod__WEBPACK_IMPORTED_MODULE_0__.object({\r\n  username: zod__WEBPACK_IMPORTED_MODULE_0__.string().min(3).max(30).optional(),\r\n  email: zod__WEBPACK_IMPORTED_MODULE_0__.string().email().optional(),\r\n  csrfToken: zod__WEBPACK_IMPORTED_MODULE_0__.string(),\r\n});\r\n\r\ndocument\r\n  .getElementById(\"profile-form\")\r\n  .addEventListener(\"submit\", async (event) => {\r\n    event.preventDefault();\r\n\r\n    const formData = new FormData(event.target);\r\n\r\n    const data = {\r\n      username: formData.get(\"username\"),\r\n      email: formData.get(\"email\"),\r\n      csrfToken: formData.get(\"csrf_token\"),\r\n    };\r\n\r\n    const result = schema.safeParse(data);\r\n\r\n    if (!result.success) {\r\n      console.error(result.error);\r\n      alert(\"Invalid data\");\r\n      return;\r\n    }\r\n\r\n    const { email, username, csrfToken } = result.data;\r\n\r\n    const res = await fetch(\"/api/updateProfile\", {\r\n      method: \"POST\",\r\n      headers: {\r\n        \"Content-Type\": \"application/x-www-form-urlencoded\",\r\n        \"X-CSRF-Token\": csrfToken,\r\n      },\r\n      body: `username=${username}&email=${email}`,\r\n    });\r\n\r\n    if (!res.ok) {\r\n      const data = await res.json();\r\n      alert(data.message);\r\n    } else {\r\n      alert(\"Profile updated successfully!\");\r\n    }\r\n  });\r\n\n\n//# sourceURL=webpack://ecommerce-store/./src/js/profile/updateProfileForm.js?");
 
 /***/ }),
 
@@ -112,75 +112,6 @@ eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpac
 /******/ 	}
 /******/ 	
 /************************************************************************/
-/******/ 	/* webpack/runtime/async module */
-/******/ 	(() => {
-/******/ 		var webpackQueues = typeof Symbol === "function" ? Symbol("webpack queues") : "__webpack_queues__";
-/******/ 		var webpackExports = typeof Symbol === "function" ? Symbol("webpack exports") : "__webpack_exports__";
-/******/ 		var webpackError = typeof Symbol === "function" ? Symbol("webpack error") : "__webpack_error__";
-/******/ 		var resolveQueue = (queue) => {
-/******/ 			if(queue && queue.d < 1) {
-/******/ 				queue.d = 1;
-/******/ 				queue.forEach((fn) => (fn.r--));
-/******/ 				queue.forEach((fn) => (fn.r-- ? fn.r++ : fn()));
-/******/ 			}
-/******/ 		}
-/******/ 		var wrapDeps = (deps) => (deps.map((dep) => {
-/******/ 			if(dep !== null && typeof dep === "object") {
-/******/ 				if(dep[webpackQueues]) return dep;
-/******/ 				if(dep.then) {
-/******/ 					var queue = [];
-/******/ 					queue.d = 0;
-/******/ 					dep.then((r) => {
-/******/ 						obj[webpackExports] = r;
-/******/ 						resolveQueue(queue);
-/******/ 					}, (e) => {
-/******/ 						obj[webpackError] = e;
-/******/ 						resolveQueue(queue);
-/******/ 					});
-/******/ 					var obj = {};
-/******/ 					obj[webpackQueues] = (fn) => (fn(queue));
-/******/ 					return obj;
-/******/ 				}
-/******/ 			}
-/******/ 			var ret = {};
-/******/ 			ret[webpackQueues] = x => {};
-/******/ 			ret[webpackExports] = dep;
-/******/ 			return ret;
-/******/ 		}));
-/******/ 		__webpack_require__.a = (module, body, hasAwait) => {
-/******/ 			var queue;
-/******/ 			hasAwait && ((queue = []).d = -1);
-/******/ 			var depQueues = new Set();
-/******/ 			var exports = module.exports;
-/******/ 			var currentDeps;
-/******/ 			var outerResolve;
-/******/ 			var reject;
-/******/ 			var promise = new Promise((resolve, rej) => {
-/******/ 				reject = rej;
-/******/ 				outerResolve = resolve;
-/******/ 			});
-/******/ 			promise[webpackExports] = exports;
-/******/ 			promise[webpackQueues] = (fn) => (queue && fn(queue), depQueues.forEach(fn), promise["catch"](x => {}));
-/******/ 			module.exports = promise;
-/******/ 			body((deps) => {
-/******/ 				currentDeps = wrapDeps(deps);
-/******/ 				var fn;
-/******/ 				var getResult = () => (currentDeps.map((d) => {
-/******/ 					if(d[webpackError]) throw d[webpackError];
-/******/ 					return d[webpackExports];
-/******/ 				}))
-/******/ 				var promise = new Promise((resolve) => {
-/******/ 					fn = () => (resolve(getResult));
-/******/ 					fn.r = 0;
-/******/ 					var fnQueue = (q) => (q !== queue && !depQueues.has(q) && (depQueues.add(q), q && !q.d && (fn.r++, q.push(fn))));
-/******/ 					currentDeps.map((dep) => (dep[webpackQueues](fnQueue)));
-/******/ 				});
-/******/ 				return fn.r ? promise : getResult();
-/******/ 			}, (err) => ((err ? reject(promise[webpackError] = err) : outerResolve(exports)), resolveQueue(queue)));
-/******/ 			queue && queue.d < 0 && (queue.d = 0);
-/******/ 		};
-/******/ 	})();
-/******/ 	
 /******/ 	/* webpack/runtime/compat get default export */
 /******/ 	(() => {
 /******/ 		// getDefaultExport function for compatibility with non-harmony modules

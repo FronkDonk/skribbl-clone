@@ -25,11 +25,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             if (!empty($_POST["username"])) {
                 $query .= "username = :username, ";
                 $params[':username'] = $_POST["username"];
+                $_SESSION["username"] = $_POST["username"];
             }
 
             if (!empty($_POST["email"])) {
                 $query .= "email = :email, ";
                 $params[':email'] = $_POST["email"];
+                $_SESSION["email"] = $_POST["email"];
             }
 
             $query = rtrim($query, ', ');
@@ -44,6 +46,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
 
             $user->execute();
+
             http_response_code(200);
             echo json_encode(['message' => 'Success']);
             exit;

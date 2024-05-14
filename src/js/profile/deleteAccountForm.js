@@ -14,7 +14,7 @@ document
 
     const data = {
       password: formData.get("delete"),
-      csrfToken: formData.get("csrf_Token"),
+      csrfToken: formData.get("csrf_token"),
     };
 
     const result = schema.safeParse(data);

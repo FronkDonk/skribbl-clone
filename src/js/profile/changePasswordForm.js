@@ -16,14 +16,15 @@ document
 
     const data = {
       password: formData.get("password"),
-      newPassword: formData.get("newPassword"),
-      confirmPassword: formData.get("confirmPassword"),
-      csrfToken: formData.get("csrf_Token"),
+      newPassword: formData.get("new-password"),
+      confirmPassword: formData.get("confirm-password"),
+      csrfToken: formData.get("csrf_token"),
     };
 
     const result = schema.safeParse(data);
 
     if (!result.success) {
+      console.error(result.error);
       alert("Invalid data");
       return;
     }

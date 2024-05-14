@@ -1,5 +1,6 @@
 <?php
 require $_SERVER['DOCUMENT_ROOT'] . '/vendor/autoload.php';
+
 use Ramsey\Uuid\Uuid;
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
@@ -38,7 +39,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $user->execute();
 
 
+
             $_SESSION["userId"] = $id;
+            $_SESSION["username"] = $_POST["username"];
+            $_SESSION["email"] = $_POST["email"];
+
             http_response_code(200);
             echo json_encode(['message' => 'Success']);
             exit;
