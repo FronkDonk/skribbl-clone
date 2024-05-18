@@ -18,6 +18,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
     require $_SERVER['DOCUMENT_ROOT'] . "/src/db/redis.php";
     try {
+        // Sparar ordet för det aktuella spelet i redis
         $client->set("game:{$_POST['gameId']}:word", $_POST["word"]);
         http_response_code(200);
         echo json_encode(['message' => 'Success']);

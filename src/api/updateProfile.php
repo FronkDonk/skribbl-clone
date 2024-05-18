@@ -11,26 +11,31 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         require $_SERVER['DOCUMENT_ROOT'] . "/src/db/db.php";
         try {
+            // Förbereder en SQL-query för att uppdatera användaren
             $query = "UPDATE users SET ";
             $params = array();
 
+            // Kontrollerar om användarnamnet är angivet och lägger till det i queryn om det är det
             if (!empty($_POST["username"])) {
                 $query .= "username = :username, ";
                 $params[':username'] = $_POST["username"];
             }
 
+            // Kontrollerar om e-postadressen är angiven och lägger till den i queryn om den är det
             if (!empty($_POST["email"])) {
                 $query .= "email = :email, ";
                 $params[':email'] = $_POST["email"];
             }
-
+            // Tar bort det sista kommat från frågan
             $query = rtrim($query, ', ');
 
+            // Lägger till villkoret för vilken användare som ska uppdateras
             $query .= " WHERE id = :userId";
             $params[':userId'] = $userId;
 
             $user = $db->prepare($query);
 
+            // Binder alla parametrar till queryn
             foreach ($params as $key => $value) {
                 $user->bindValue($key, $value);
             }

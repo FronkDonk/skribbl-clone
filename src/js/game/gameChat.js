@@ -1,15 +1,6 @@
 import * as z from "zod";
-import {
-  correctGuesses,
-  player,
-  players,
-  roundFinsihedEarly,
-  setRoundFinsihedEarly,
-  timer,
-  timesUp,
-  userStatus,
-} from "./gamePresence";
-import { saveChatMessage, sendChatMessage } from "../actions/saveChatMessage";
+import { correctGuesses, players, timesUp, userStatus } from "./gamePresence";
+import { saveChatMessage } from "../actions/saveChatMessage";
 import { client } from "../supabaseClient";
 import { guessIsCorrect } from "../actions/guessIsCorrect";
 import { renderScoreboard } from "./gameUi";

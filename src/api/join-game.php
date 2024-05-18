@@ -8,7 +8,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     require $_SERVER['DOCUMENT_ROOT'] . '/src/validators/index.php';
 
     $validator = new Validator();
-
+    // Validerar inkommande data
     $errors = $validator->validate([
         'gameId' => [$validator->notEmpty(), $validator->htmlspecialchars(), $validator->stringType(), $validator->minLength(6), $validator->maxLength(6)],
         "username" => [$validator->notEmpty(), $validator->htmlspecialchars(), $validator->stringType()],
@@ -21,6 +21,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         require $_SERVER['DOCUMENT_ROOT'] . "/src/db/redis.php";
         require $_SERVER['DOCUMENT_ROOT'] . "/src/constants/constants.php";
         try {
+            // Kontrollerar om spelet existerar i redis
             $gameId = $_POST['gameId'];
             $existingGame = $client->get("game:$gameId");
             if ($existingGame === null) {
@@ -28,16 +29,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 echo json_encode(['message' => 'Game does not exist']);
                 exit;
             }
+            // Skapar ett unikt spelar-id och sätter det i sessionen
             $id = Uuid::uuid4()->toString();
             $_SESSION["playerId"] = $id;
 
-            //generate random index from colors array
-
-
+            // Väljer en slumpmässig avatar från en lista med färger
             $randomIndex = array_rand($colors, 1);
             $avatar = $colors[$randomIndex];
 
-
+            // Skapar en ny spelare i databasen
             $query = $db->prepare("INSERT INTO room_players (id, username, game_room_id, score, is_owner, avatar) VALUES (:id, :username, :gameId, 0, :is_owner, :avatar)");
             $query->bindValue(':id', $id);
             $query->bindValue(':gameId', $gameId);
@@ -46,7 +46,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $query->bindValue(':avatar', $avatar);
             $query->execute();
 
-
+            // Skickar tillbaka status 200 till klienten
             http_response_code(200);
             echo json_encode(['message' => 'Success']);
             exit;

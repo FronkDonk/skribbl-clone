@@ -7,33 +7,26 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     $userId = $_SESSION["userId"];
 
     try {
-        // First, fetch the room_players for the user
+        // Förbereder en SQL-query för att hämta alla spelrum där användaren har deltagit
         $query = $db->prepare("SELECT * FROM room_players WHERE user_id = :userId");
         $query->bindValue(':userId', $userId);
         $query->execute();
         $userRooms = $query->fetchAll(PDO::FETCH_ASSOC);
-
-        // Then, for each room_player, fetch the game room and all players
+        // Loopar igenom alla spelrum
         foreach ($userRooms as $index => $userRoom) {
-            // Fetch the game room
+            // Hämtar information om det specifika spelrummet
             $query = $db->prepare("SELECT * FROM game_room WHERE id = :gameRoomId ORDER BY created_at DESC");
             $query->bindValue(':gameRoomId', $userRoom['game_room_id']);
             $query->execute();
             $gameRoom = $query->fetch(PDO::FETCH_ASSOC);
 
-            // Fetch all players for the game room
+            // Hämtar alla spelare i det specifika spelrummet
             $query = $db->prepare("SELECT * FROM room_players WHERE game_room_id = :gameRoomId ORDER BY score DESC");
             $query->bindValue(':gameRoomId', $userRoom['game_room_id']);
             $query->execute();
             $players = $query->fetchAll(PDO::FETCH_ASSOC);
 
-            // Filter out the current user
-            /*   $players = array_filter($players, function ($player) use ($userId) {
-                  return $player['user_id'] !== $userId;
-              }); */
-
-
-            // Add the game room and players to the user room
+            // Lägger till spelrum- och spelarinformation till det aktuella spelrummet
             $userRooms[$index]['game_room'] = $gameRoom;
             $userRooms[$index]['players'] = $players;
         }
