@@ -16,6 +16,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     header('Content-Type: application/json');
     if (empty($errors)) {
+        $headers = getallheaders();
+        $csrfToken = $headers['X-CSRF-Token'];
+        if ($csrfToken !== $_SESSION['csrf_token']) {
+            http_response_code(403);
+            echo json_encode(['message' => 'CSRF token mismatch']);
+            exit;
+        }
+
         require $_SERVER['DOCUMENT_ROOT'] . "/src/db/db.php";
 
         $userId = $_SESSION['userId'];
@@ -36,6 +44,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $query->bindValue(":id", $userId);
             $query->execute();
 
+            $_SESSION = [];
 
             http_response_code(200);
             echo json_encode(["message" => "Account deleted successfully"]);

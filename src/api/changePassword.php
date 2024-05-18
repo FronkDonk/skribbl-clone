@@ -20,6 +20,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     header('Content-Type: application/json');
     if (empty($errors)) {
+        $headers = getallheaders();
+        $csrfToken = $headers['X-CSRF-Token'];
+        if ($csrfToken !== $_SESSION['csrf_token']) {
+            http_response_code(403);
+            echo json_encode(['message' => 'CSRF token mismatch']);
+            exit;
+        }
 
         require $_SERVER['DOCUMENT_ROOT'] . "/src/db/db.php";
         try {

@@ -6,8 +6,16 @@ require $_SERVER['DOCUMENT_ROOT'] . '/vendor/autoload.php';
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $userId = $_SESSION["userId"];
 
+
     header('Content-Type: application/json');
     if (empty($errors)) {
+        $headers = getallheaders();
+        $csrfToken = $headers['X-CSRF-Token'];
+        if ($csrfToken !== $_SESSION['csrf_token']) {
+            http_response_code(403);
+            echo json_encode(['message' => 'CSRF token mismatch']);
+            exit;
+        }
 
         require $_SERVER['DOCUMENT_ROOT'] . "/src/db/db.php";
         try {
@@ -19,12 +27,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             if (!empty($_POST["username"])) {
                 $query .= "username = :username, ";
                 $params[':username'] = $_POST["username"];
+                $_SESSION["username"] = $_POST["username"];
             }
 
             // Kontrollerar om e-postadressen är angiven och lägger till den i queryn om den är det
             if (!empty($_POST["email"])) {
                 $query .= "email = :email, ";
                 $params[':email'] = $_POST["email"];
+                $_SESSION["email"] = $_POST["email"];
             }
             // Tar bort det sista kommat från frågan
             $query = rtrim($query, ', ');
@@ -41,6 +51,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
 
             $user->execute();
+
             http_response_code(200);
             echo json_encode(['message' => 'Success']);
             exit;

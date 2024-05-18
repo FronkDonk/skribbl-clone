@@ -20,9 +20,9 @@ data.map((game) => {
           ${game.players.map((player, i) => {
             return `
               <span class="relative flex h-10 w-10 shrink-0 overflow-hidden rounded-full">
-                <span class="flex h-full w-full items-center justify-center rounded-full bg-muted">P${
-                  i + 1
-                }</span>
+                <span class="flex text-muted h-full w-full items-center justify-center rounded-full bg-gradient-to-tr ${
+                  player.avatar
+                }">P${i + 1}</span>
               </span>
               <span>${player.username}: ${player.score} points</span>
             `;

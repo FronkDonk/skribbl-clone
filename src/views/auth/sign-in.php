@@ -12,11 +12,15 @@
     <?php
     require $_SERVER['DOCUMENT_ROOT'] . '/vendor/autoload.php';
     //yup
-    
+
     use Jenssegers\Blade\Blade;
 
     $blade = new Blade($_SERVER['DOCUMENT_ROOT'] . '/src/components/ui', $_SERVER['DOCUMENT_ROOT'] . '/temp');
 
+    ?>
+
+    <?php
+    echo $blade->make("navbar")->render();
     ?>
     <div class="w-full h-svh lg:grid lg:min-h-[600px] lg:grid-cols-2 xl:min-h-[800px]">
         <div class="flex items-center justify-center py-12">
@@ -72,19 +76,17 @@
 
                 <div class="mt-4 text-center text-sm">
                     Don't have an account?
-                    <a href="#" class="underline ">
+                    <a href="/auth/sign-up" class="underline ">
                         Sign up
                     </a>
                 </div>
             </div>
         </div>
         <div class="hidden bg-muted lg:block">
-            <img src="/placeholder.svg" alt="Image" width="1920" height="1080"
-                class="h-full w-full object-cover dark:brightness-[0.2] dark:grayscale" />
+            <img src="/placeholder.svg" alt="Image" width="1920" height="1080" class="h-full w-full object-cover dark:brightness-[0.2] dark:grayscale" />
         </div>
     </div>
     <script src="/dist/signIn.bundle.js"></script>
-
 </body>
 
 </html>

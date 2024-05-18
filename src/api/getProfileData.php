@@ -3,6 +3,7 @@
 
 if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     header('Content-Type: application/json');
+
     require $_SERVER['DOCUMENT_ROOT'] . '/src/db/db.php';
     $playerId = $_SESSION["userId"];
 

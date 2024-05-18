@@ -15,7 +15,9 @@
     use Jenssegers\Blade\Blade;
 
     $blade = new Blade($_SERVER['DOCUMENT_ROOT'] . '/src/components/ui', $_SERVER['DOCUMENT_ROOT'] . '/src/components/ui/cache');
-
+    ?>
+    <?php
+    echo $blade->make("navbar")->render();
     ?>
     <div class="w-full h-svh lg:grid lg:min-h-[600px] lg:grid-cols-2 xl:min-h-[800px]">
         <div class="flex items-center justify-center py-12">
@@ -89,7 +91,7 @@
                 </form>
                 <div class="mt-4 text-center text-sm">
                     Already have an account?
-                    <a href="#" class="underline ">
+                    <a href="/auth/sign-in" class="underline ">
                         Sign in
                     </a>
                 </div>

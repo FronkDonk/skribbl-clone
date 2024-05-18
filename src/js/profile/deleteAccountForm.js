@@ -2,6 +2,7 @@ import * as z from "zod";
 
 const schema = z.object({
   password: z.string(),
+  csrfToken: z.string(),
 });
 
 document
@@ -13,6 +14,7 @@ document
 
     const data = {
       password: formData.get("delete"),
+      csrfToken: formData.get("csrf_token"),
     };
 
     const result = schema.safeParse(data);
@@ -21,11 +23,12 @@ document
       alert("invalid data");
       console.error(result.error);
     }
-    const { password } = result.data;
+    const { password, csrfToken } = result.data;
     const res = await fetch("/api/deleteAccount", {
       method: "POST",
       headers: {
         "Content-Type": "application/x-www-form-urlencoded",
+        "X-CSRF-Token": csrfToken,
       },
       body: `password=${password}`,
     });
