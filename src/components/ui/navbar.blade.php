@@ -5,10 +5,11 @@ $blade = new Blade($_SERVER['DOCUMENT_ROOT'] . '/src/components/ui', $_SERVER['D
 ?>
 
 <header class="sticky top-0 flex justify-between h-16 items-center gap-4 border-b bg-background px-4 md:px-6">
+    <a class="transition-colors text-lg hover:text-muted-foreground font-semibold " href="/">
+        DrawFuse
+    </a>
     <nav class="font-medium flex flex-row items-center gap-5 text-sm lg:gap-6">
-        <a class="transition-colors text-lg hover:text-muted-foreground font-semibold " href="/">
-            DrawFuse
-        </a>
+
         <a class="text-muted-foreground transition-colors hover:text-foreground" href="/create-game">
             Create game
         </a>
